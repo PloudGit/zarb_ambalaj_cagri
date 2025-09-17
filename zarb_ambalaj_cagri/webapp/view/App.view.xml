@@ -1,6 +1,20 @@
-<mvc:View controllerName="com.app.abdiibrahim.zarbambalajcagri.controller.App"
+
+<mvc:View
+    controllerName="com.app.abdiibrahim.zarbambalajcagri.controller.App"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    </Page>
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <!-- <Page id="page" title="{i18n>title}">
+        <content />
+    </Page> -->
+    <!-- <Shell id="shell"> -->
+    <App id="app">
+        <pages>
+            <Page id="page">
+                <content />
+            </Page>
+        </pages>
+    </App>
+    <!-- </Shell> -->
 </mvc:View>

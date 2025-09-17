@@ -29,6 +29,7 @@
     },
     "sap.ui": {
         "technology": "UI5",
+        "fullWidth": true,
         "icons": {
             "icon": "",
             "favIcon": "",
@@ -48,8 +49,10 @@
         "dependencies": {
             "minUI5Version": "1.120.23",
             "libs": {
+                "sap.ui.comp": {},
+                "sap.ui.core": {},
                 "sap.m": {},
-                "sap.ui.core": {}
+                "sap.f": {}
             }
         },
         "contentDensities": {
@@ -90,17 +93,34 @@
             },
             "routes": [
                 {
-                    "name": "RouteApp",
+                    "name": "Main",
                     "pattern": ":?query:",
                     "target": [
-                        "TargetApp"
+                        "Main"
+                    ]
+                },
+                {
+                    "name": "Display",
+                    "pattern": "Main/{ArbRfxId}",
+                    "target": [
+                        "Main"
                     ]
                 }
             ],
             "targets": {
                 "TargetApp": {
-                    "id": "App",
-                    "name": "App"
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "App",
+                    "viewName": "App"
+                },
+                "Main": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "Main",
+                    "viewName": "Main"
                 }
             }
         },

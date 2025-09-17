@@ -14,7 +14,7 @@ builder:
       afterTask: generateCachebusterInfo
       configuration:
         target:
-          url: https://vhvctds4ci.sap.abdiibrahim.com.tr:44300/
+          url: https://vhvctds4ci.sap.abdiibrahim.com.tr:44300
           client: '100'
         app:
           name: ZARBUI_AMBALAJC
