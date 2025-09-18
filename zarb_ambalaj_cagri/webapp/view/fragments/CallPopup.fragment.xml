@@ -86,7 +86,9 @@
             />
             <TextArea
                 value="{dm>/selectedRow/ReviseNote}"
-                rows="3"
+                rows="5"
+                width="100%"
+                growing="true"
                 editable="{pm>/popup/fields/ReviseNote/editable}"
                 visible="{pm>/popup/fields/ReviseNote/visible}"
             />
@@ -98,17 +100,49 @@
             />
             <TextArea
                 value="{dm>/selectedRow/CancelNote}"
-                rows="3"
+                rows="5"
+                width="100%"
+                growing="true"
                 editable="{pm>/popup/fields/CancelNote/editable}"
                 visible="{pm>/popup/fields/CancelNote/visible}"
             />
         </VBox>
 
-        <endButton>
+        <buttons>
+            <!-- Ekle butonu -->
+            <Button
+                text="{i18n>btnAdd}"
+                icon="sap-icon://add"
+                visible="{= ${pm>/popup/action} === 'add'}"
+                press=".onConfirmAdd"
+                class="blueButton"
+            />
+
+            <!-- Revize Et butonu -->
+            <Button
+                text="{i18n>btnRevise}"
+                icon="sap-icon://edit"
+                visible="{= ${pm>/popup/action} === 'change'}"
+                press=".onConfirmChange"
+                class="orangeButton"
+            />
+
+            <!-- Çağrıyı İptal Et butonu -->
+            <Button
+                text="{i18n>btnCancel}"
+                icon="sap-icon://decline"
+                visible="{= ${pm>/popup/action} === 'cancel'}"
+                press=".onConfirmCancel"
+                class="redButton"
+            />
+
+            <!-- Kapat butonu -->
             <Button
                 text="{i18n>btnClose}"
+                icon="sap-icon://sys-cancel"
+                class="redButton"
                 press=".onClosePopup"
             />
-        </endButton>
+        </buttons>
     </Dialog>
 </core:FragmentDefinition>

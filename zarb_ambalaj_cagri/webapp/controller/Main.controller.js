@@ -55,6 +55,7 @@ sap.ui.define([
             this.setMessagePopover(this);
             var that = this;
 
+            this._main.setFilterBar(this, "smartFilterBar");
         },
 
         _onRouteMatched: function () {
@@ -142,20 +143,20 @@ sap.ui.define([
             // pm model state
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
-                title: that.getResourceBundle().getText("popupAddNewCallTitle"),
+                title: that.getResourceBundle().getText("popupReviseCallTitle"),
                 action: "change",
                 fields: {
                     TermItemNum: { visible: true, editable: false },
                     Quantity: { visible: true, editable: true },
                     Unit: { visible: true, editable: false },
-                    DeliveryDate: { visible: true, editable: true },
+                    DeliveryDate: { visible: true, editable: false },
                     FirmDelivery: { visible: true, editable: true },
                     PrintCode: { visible: true, editable: true },
-                    ReviseNote: { visible: false, editable: false },
+                    ReviseNote: { visible: true, editable: true },
                     CancelNote: { visible: false, editable: false }
                 }
             });
-
+            
             that._callPopup().open();
 
         },
@@ -176,16 +177,16 @@ sap.ui.define([
 
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
-                title: this.getResourceBundle().getText("popupReviseCallTitle"),
+                title: this.getResourceBundle().getText("popupAddNewCallTitle"),
                 action: "add",
                 fields: {
                     TermItemNum: { visible: true, editable: false },
                     Quantity: { visible: true, editable: true },
                     Unit: { visible: true, editable: false },
-                    DeliveryDate: { visible: true, editable: true },
+                    DeliveryDate: { visible: true, editable: false },
                     FirmDelivery: { visible: true, editable: true },
                     PrintCode: { visible: true, editable: true },
-                    ReviseNote: { visible: true, editable: true },
+                    ReviseNote: { visible: false, editable: false },
                     CancelNote: { visible: false, editable: false }
                 }
             });

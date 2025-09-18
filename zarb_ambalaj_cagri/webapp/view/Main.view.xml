@@ -99,31 +99,35 @@
                                             icon="sap-icon://edit"
                                             text="{i18n>btnChange}"
                                             press=".onChange"
+                                            class="orangeButton"
                                         />
 
                                         <Button
                                             icon="sap-icon://add-document"
                                             text="{i18n>btnAddNewCall}"
                                             press=".onAddNewCall"
+                                            class="blueButton"
                                         />
 
                                         <Button
                                             icon="sap-icon://delete"
                                             text="{i18n>btnCancelCall}"
                                             press=".onCancelCall"
+                                            class="redButton"
                                         />
 
                                         <ToolbarSpacer />
                                         <Button
                                             icon="sap-icon://save"
                                             text="{i18n>btnSave}"
-                                            type="Emphasized"
                                             press=".onSave"
+                                            class="greenButton"
                                         />
                                         <Button
                                             icon="sap-icon://download"
                                             text="{i18n>export}"
                                             press=".onExport"
+                                            class="yellowButton"
                                         />
                                     </Toolbar>
                                 </t:toolbar>
@@ -201,7 +205,7 @@
                                     </t:Column>
 
                                     <t:Column>
-                                        <Label text="{i18n>deliveryDate}" />
+                                        <Label text="{i18n>firmDeliveryDate}" />
                                         <t:template>
                                             <DatePicker
                                                 value="{path: 'dm>Eindt', type: 'sap.ui.model.type.Date'}"

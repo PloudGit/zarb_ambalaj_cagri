@@ -1,1 +1,77 @@
-/* Enter your custom styles here */
+/* Sarı */
+.yellowButton .sapMBtnInner {
+    background-color: rgb(243, 222, 162) !important;
+    color: black !important;
+}
+
+.yellowButton .sapMBtnIcon,
+.yellowButton .sapMBtnText {
+    color: black !important;
+    fill: black !important;
+    text-shadow: none !important;
+}
+
+/* Mavi */
+.blueButton .sapMBtnInner {
+    background-color: rgb(173, 216, 230) !important;
+    color: black !important;
+}
+
+.blueButton .sapMBtnIcon,
+.blueButton .sapMBtnText {
+    color: black !important;
+    fill: black !important;
+    text-shadow: none !important;
+}
+
+/* Yeşil */
+.greenButton .sapMBtnInner {
+    background-color: rgb(144, 238, 144) !important;
+    color: black !important;
+}
+
+.greenButton .sapMBtnIcon,
+.greenButton .sapMBtnText {
+    color: black !important;
+    fill: black !important;
+    text-shadow: none !important;
+}
+
+/* Turuncu */
+.orangeButton .sapMBtnInner {
+    background-color: rgb(255, 200, 124) !important;
+    color: black !important;
+}
+
+.orangeButton .sapMBtnIcon,
+.orangeButton .sapMBtnText {
+    color: black !important;
+    fill: black !important;
+    text-shadow: none !important;
+}
+
+/* Kırmızı */
+.redButton .sapMBtnInner {
+    background-color: rgb(255, 140, 140) !important;
+    color: black !important;
+}
+
+.redButton .sapMBtnIcon,
+.redButton .sapMBtnText {
+    color: black !important;
+    fill: black !important;
+    text-shadow: none !important;
+}
+
+/* Gri */
+.greyButton .sapMBtnInner {
+    background-color: rgb(211, 211, 211) !important;
+    color: black !important;
+}
+
+.greyButton .sapMBtnIcon,
+.greyButton .sapMBtnText {
+    color: black !important;
+    fill: black !important;
+    text-shadow: none !important;
+}
