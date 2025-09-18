@@ -35,7 +35,7 @@ sap.ui.define([
         onInit: function (oEvent) {
             this._Router = this.getOwnerComponent().getRouter();
             this._Router.getRoute("Main").attachMatched(this._onRouteMatched, this);
-            this._Router.getRoute("Display").attachMatched(this._onRouteMatchedDisplay, this);
+            // this._Router.getRoute("Display").attachMatched(this._onRouteMatchedDisplay, this);
 
             //Datamodel js 
             this._dataModel = new DataModel();
@@ -61,7 +61,7 @@ sap.ui.define([
             // Route matched işlemleri
             var that = this;
 
-          
+            // listeyi al 
 
         },
 
@@ -84,6 +84,17 @@ sap.ui.define([
         onExit: function () {
             // Çıkış işlemleri
         },
+
+
+        onSearch: function (oEvent) {
+            debugger;
+            var oSmartFilterBar = this.byId("smartFilterBar");
+
+            var aFilters = oSmartFilterBar.getFilters();
+
+            this._oData.getOrderList(this, aFilters);
+
+        }
 
 
     });

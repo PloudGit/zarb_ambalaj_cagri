@@ -25,41 +25,54 @@
                         <f:header>
                             <f:DynamicPageHeader>
                                 <f:content>
-                                    <!-- FILTER BAR -->
                                     <smartFilterBar:SmartFilterBar
                                         id="smartFilterBar"
-                                        entitySet="OrderSet"
+                                        entitySet="OrderListsSet"
                                         useToolbar="true"
                                         showClearButton="true"
                                         showGoOnFB="true"
-                                        useVariantManagement="true"
                                         persistencyKey="ZARBAMBALAJCAGRI_FILTERBAR"
+                                        search=".onSearch"
                                     >
                                         <smartFilterBar:controlConfiguration>
+                                            <!-- Tedarikçi -->
                                             <smartFilterBar:ControlConfiguration
-                                                key="SupplierId"
+                                                key="Lifnr"
                                                 label="{i18n>supplier}"
                                                 index="1"
+                                                visibleInAdvancedArea="true"
                                             />
+
+                                            <!-- SAS Numarası -->
                                             <smartFilterBar:ControlConfiguration
-                                                key="SASNum"
+                                                key="Ebeln"
                                                 label="{i18n>sasNumber}"
                                                 index="2"
+                                                visibleInAdvancedArea="true"
                                             />
+
+                                            <!-- Malzeme Kodu -->
                                             <smartFilterBar:ControlConfiguration
-                                                key="MaterialCode"
+                                                key="Matnr"
                                                 label="{i18n>materialCode}"
                                                 index="3"
+                                                visibleInAdvancedArea="true"
                                             />
+
+                                            <!-- Üretim Yeri -->
                                             <smartFilterBar:ControlConfiguration
-                                                key="Plant"
+                                                key="Werks"
                                                 label="{i18n>plant}"
                                                 index="4"
+                                                visibleInAdvancedArea="true"
                                             />
+
+                                            <!-- Ölçü Birimi -->
                                             <smartFilterBar:ControlConfiguration
-                                                key="Unit"
+                                                key="Meins"
                                                 label="{i18n>unit}"
                                                 index="5"
+                                                visibleInAdvancedArea="true"
                                             />
                                         </smartFilterBar:controlConfiguration>
                                     </smartFilterBar:SmartFilterBar>
@@ -71,12 +84,11 @@
                         <f:content>
                             <t:Table
                                 id="mainTable"
-                                rows="{/OrderSet}"
+                                rows="{dm>/OrderList}"
                                 visibleRowCount="10"
                                 selectionMode="Single"
                                 threshold="50"
                                 enableColumnReordering="true"
-                                enableSorting="true"
                                 enableCellFilter="true"
                                 width="100%"
                             >
@@ -97,67 +109,68 @@
                                         />
                                     </Toolbar>
                                 </t:toolbar>
+
                                 <t:columns>
-                                    <t:Column>
+                                    <t:Column sortProperty="Ebeln">
                                         <Label text="{i18n>sasNumber}" />
                                         <t:template>
-                                            <Text text="{SASNum}" />
+                                            <Text text="{dm>Ebeln}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Ebelp">
                                         <Label text="{i18n>itemNumber}" />
                                         <t:template>
-                                            <Text text="{ItemNum}" />
+                                            <Text text="{dm>Ebelp}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Matnr">
                                         <Label text="{i18n>materialCode}" />
                                         <t:template>
-                                            <Text text="{MaterialCode}" />
+                                            <Text text="{dm>Matnr}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Txt01">
                                         <Label text="{i18n>materialDesc}" />
                                         <t:template>
-                                            <Text text="{MaterialDesc}" />
+                                            <Text text="{dm>Txt01}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Lifnr">
                                         <Label text="{i18n>supplier}" />
                                         <t:template>
-                                            <Text text="{SupplierId}" />
+                                            <Text text="{dm>Lifnr}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Name1">
                                         <Label text="{i18n>supplierName}" />
                                         <t:template>
-                                            <Text text="{SupplierName}" />
+                                            <Text text="{dm>Name1}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Menge">
                                         <Label text="{i18n>quantity}" />
                                         <t:template>
-                                            <Text text="{Quantity}" />
+                                            <Text text="{dm>Menge}" />
                                         </t:template>
                                     </t:Column>
 
                                     <t:Column>
                                         <Label text="{i18n>unit}" />
                                         <t:template>
-                                            <Text text="{Unit}" />
+                                            <Text text="{dm>Meins}" />
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column>
+                                    <t:Column sortProperty="Sevkm">
                                         <Label text="{i18n>remainingQty}" />
                                         <t:template>
-                                            <Text text="{RemainingQty}" />
+                                            <Text text="{dm>Sevkm}" />
                                         </t:template>
                                     </t:Column>
 
@@ -165,7 +178,7 @@
                                     <t:Column>
                                         <Label text="{i18n>printCode}" />
                                         <t:template>
-                                            <Input value="{PrintCode}" />
+                                            <Input value="{dm>Zdrukodu}" />
                                         </t:template>
                                     </t:Column>
 
@@ -173,7 +186,7 @@
                                         <Label text="{i18n>deliveryDate}" />
                                         <t:template>
                                             <DatePicker
-                                                value="{path: 'DeliveryDate', type: 'sap.ui.model.type.Date'}"
+                                                value="{path: 'dm>Eindt', type: 'sap.ui.model.type.Date'}"
                                                 displayFormat="short"
                                             />
                                         </t:template>
@@ -182,14 +195,14 @@
                                     <t:Column>
                                         <Label text="{i18n>status}" />
                                         <t:template>
-                                            <Text text="{Status}" />
+                                            <Text text="{dm>Status}" />
                                         </t:template>
                                     </t:Column>
 
                                     <t:Column>
                                         <Label text="{i18n>note}" />
                                         <t:template>
-                                            <Text text="{Note}" />
+                                            <Text text="{dm>Note}" />
                                         </t:template>
                                     </t:Column>
                                 </t:columns>

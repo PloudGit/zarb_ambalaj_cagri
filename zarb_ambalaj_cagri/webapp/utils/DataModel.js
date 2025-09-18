@@ -17,7 +17,9 @@ sap.ui.define([
 			// var i18n = that.getView().getModel("i18n").getResourceBundle();
 
 
-			var dData = {}
+			var dData = {
+				OrderList:[]
+			}
 
 
 			dModel.setData(dData);
