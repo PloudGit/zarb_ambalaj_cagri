@@ -95,6 +95,24 @@
                                 <t:toolbar>
                                     <Toolbar>
                                         <Title text="{i18n>tableHeader}" />
+                                        <Button
+                                            icon="sap-icon://edit"
+                                            text="{i18n>btnChange}"
+                                            press=".onChange"
+                                        />
+
+                                        <Button
+                                            icon="sap-icon://add-document"
+                                            text="{i18n>btnAddNewCall}"
+                                            press=".onAddNewCall"
+                                        />
+
+                                        <Button
+                                            icon="sap-icon://delete"
+                                            text="{i18n>btnCancelCall}"
+                                            press=".onCancelCall"
+                                        />
+
                                         <ToolbarSpacer />
                                         <Button
                                             icon="sap-icon://save"

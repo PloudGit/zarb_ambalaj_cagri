@@ -18,7 +18,8 @@ sap.ui.define([
 
 
 			var dData = {
-				OrderList:[]
+				selectedRow: {},
+				OrderList: []
 			}
 
 
@@ -34,9 +35,25 @@ sap.ui.define([
 
 			var pModel = new JSONModel();
 
-			var pData = {}
+			var pData = {
 
-					// pModel.loadData(sPath, "false");
+				popup: {
+					title: "",     
+					action: "",     
+					fields: {
+						TermItemNum: { visible: true, editable: false },
+						Quantity: { visible: true, editable: true },
+						Unit: { visible: true, editable: false },
+						DeliveryDate: { visible: true, editable: true },
+						FirmDelivery: { visible: true, editable: true },
+						PrintCode: { visible: true, editable: true },
+						ReviseNote: { visible: false, editable: true },
+						CancelNote: { visible: false, editable: true }
+					}
+				}
+			}
+
+			// pModel.loadData(sPath, "false");
 			pModel.setData(pData);
 			pModel.refresh();
 

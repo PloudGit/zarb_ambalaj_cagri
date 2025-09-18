@@ -94,8 +94,169 @@ sap.ui.define([
 
             this._oData.getOrderList(this, aFilters);
 
-        }
+        },
 
+        _validateSelection: function (that) {
+            var oTable = that.byId("mainTable");
+            var aSelectedIndices = oTable.getSelectedIndices();
+
+            if (aSelectedIndices.length === 0) {
+                that.showMessage("error", "msgNoSelection");
+                return null;
+            }
+
+            if (aSelectedIndices.length > 1) {
+                that.showMessage("error", "msgMultipleSelection");
+                return null;
+            }
+
+            return aSelectedIndices[0];
+        },
+
+        _getSelectedRowData: function (that, index) {
+            var oTable = that.byId("mainTable");
+            var oContext = oTable.getContextByIndex(index);
+            return oContext ? oContext.getObject() : null;
+        },
+
+        _setSelectedRow: function (that, oRowData) {
+            var dModel = that.getOModel(that, "dm");
+            dModel.setProperty("/selectedRow", oRowData);
+        },
+
+
+        onChange: function () {
+            var that = this;
+            var index = that._validateSelection(that);
+            if (index === null) {
+                return;
+            }
+
+            var oRowData = that._getSelectedRowData(that, index);
+            if (!oRowData) {
+                return;
+            }
+
+            that._setSelectedRow(that, oRowData);
+
+            // pm model state
+            var pModel = that.getOModel(that, "pm");
+            pModel.setProperty("/popup", {
+                title: that.getResourceBundle().getText("popupAddNewCallTitle"),
+                action: "change",
+                fields: {
+                    TermItemNum: { visible: true, editable: false },
+                    Quantity: { visible: true, editable: true },
+                    Unit: { visible: true, editable: false },
+                    DeliveryDate: { visible: true, editable: true },
+                    FirmDelivery: { visible: true, editable: true },
+                    PrintCode: { visible: true, editable: true },
+                    ReviseNote: { visible: false, editable: false },
+                    CancelNote: { visible: false, editable: false }
+                }
+            });
+
+            that._callPopup().open();
+
+        },
+
+        onAddNewCall: function () {
+            var that = this;
+            var index = that._validateSelection(that);
+            if (index === null) {
+                return;
+            }
+
+            var oRowData = that._getSelectedRowData(that, index);
+            if (!oRowData) {
+                return;
+            }
+
+            that._setSelectedRow(that, oRowData);
+
+            var pModel = that.getOModel(that, "pm");
+            pModel.setProperty("/popup", {
+                title: this.getResourceBundle().getText("popupReviseCallTitle"),
+                action: "add",
+                fields: {
+                    TermItemNum: { visible: true, editable: false },
+                    Quantity: { visible: true, editable: true },
+                    Unit: { visible: true, editable: false },
+                    DeliveryDate: { visible: true, editable: true },
+                    FirmDelivery: { visible: true, editable: true },
+                    PrintCode: { visible: true, editable: true },
+                    ReviseNote: { visible: true, editable: true },
+                    CancelNote: { visible: false, editable: false }
+                }
+            });
+
+            that._callPopup().open();
+
+        },
+
+        onCancelCall: function () {
+            var that = this;
+            var index = that._validateSelection(that);
+            if (index === null) {
+                return;
+            }
+
+            var oRowData = that._getSelectedRowData(that, index);
+            if (!oRowData) {
+                return;
+            }
+
+            that._setSelectedRow(that, oRowData);
+
+            var pModel = that.getOModel(that, "pm");
+            pModel.setProperty("/popup", {
+                title: this.getResourceBundle().getText("popupCancelCallTitle"),
+                action: "cancel",
+                fields: {
+                    TermItemNum: { visible: true, editable: false },
+                    Quantity: { visible: true, editable: false },
+                    Unit: { visible: true, editable: false },
+                    DeliveryDate: { visible: true, editable: false },
+                    FirmDelivery: { visible: true, editable: false },
+                    PrintCode: { visible: true, editable: false },
+                    ReviseNote: { visible: false, editable: false },
+                    CancelNote: { visible: true, editable: true }
+                }
+            });
+
+            that._callPopup().open();
+
+        },
+
+        getResourceBundle: function () {
+            return this.getView().getModel("i18n").getResourceBundle();
+        },
+
+
+        _callPopup: function () {
+
+
+            var that = this;
+
+            if (!that.CallPopup) {
+
+                that.CallPopup = sap.ui.xmlfragment("com.app.abdiibrahim.zarbambalajcagri.view.fragments.CallPopup", that);
+
+                that.CallPopup.setModel(that.getView().getModel());
+
+                that.getView().addDependent(that.CallPopup);
+
+                jQuery.sap.syncStyleClass("sapUiSizeCompact", that.getView(), that.CallPopup);
+
+            }
+            return that.CallPopup;
+        },
+
+        onClosePopup: function () {
+            if (this.CallPopup) {
+                this.CallPopup.close();
+            }
+        }
 
     });
 });

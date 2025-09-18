@@ -1,0 +1,114 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="popupDialog"
+        title="{pm>/popup/title}"
+        stretchOnPhone="true"
+        draggable="true"
+        resizable="true"
+        contentWidth="600px"
+    >
+        <VBox class="sapUiSmallMargin">
+            <!-- Temin Satır Numarası -->
+            <Label
+                text="{i18n>termItemNum}"
+                visible="{pm>/popup/fields/TermItemNum/visible}"
+            />
+            <Input
+                value="{dm>/selectedRow/Ebelp}"
+                editable="{pm>/popup/fields/TermItemNum/editable}"
+                visible="{pm>/popup/fields/TermItemNum/visible}"
+            />
+
+            <!-- Miktar -->
+            <Label
+                text="{i18n>quantity}"
+                visible="{pm>/popup/fields/Quantity/visible}"
+            />
+            <Input
+                value="{dm>/selectedRow/Menge}"
+                editable="{pm>/popup/fields/Quantity/editable}"
+                visible="{pm>/popup/fields/Quantity/visible}"
+            />
+
+            <!-- Ölçü Birimi -->
+            <Label
+                text="{i18n>unit}"
+                visible="{pm>/popup/fields/Unit/visible}"
+            />
+            <Input
+                value="{dm>/selectedRow/Meins}"
+                editable="{pm>/popup/fields/Unit/editable}"
+                visible="{pm>/popup/fields/Unit/visible}"
+            />
+
+            <!-- Teslim Tarihi -->
+            <Label
+                text="{i18n>deliveryDate}"
+                visible="{pm>/popup/fields/DeliveryDate/visible}"
+            />
+            <DatePicker
+                value="{path:'dm>/selectedRow/Eindt', type:'sap.ui.model.type.Date'}"
+                displayFormat="short"
+                editable="{pm>/popup/fields/DeliveryDate/editable}"
+                visible="{pm>/popup/fields/DeliveryDate/visible}"
+            />
+
+            <!-- Firma Teslim Tarihi -->
+            <Label
+                text="{i18n>firmDeliveryDate}"
+                visible="{pm>/popup/fields/FirmDelivery/visible}"
+            />
+            <DatePicker
+                value="{path:'dm>/selectedRow/FirmaTeslim', type:'sap.ui.model.type.Date'}"
+                displayFormat="short"
+                editable="{pm>/popup/fields/FirmDelivery/editable}"
+                visible="{pm>/popup/fields/FirmDelivery/visible}"
+            />
+
+            <!-- Printkod -->
+            <Label
+                text="{i18n>printCode}"
+                visible="{pm>/popup/fields/PrintCode/visible}"
+            />
+            <Input
+                value="{dm>/selectedRow/Zdrukodu}"
+                editable="{pm>/popup/fields/PrintCode/editable}"
+                visible="{pm>/popup/fields/PrintCode/visible}"
+            />
+
+            <!-- Revize Notu -->
+            <Label
+                text="{i18n>reviseNote}"
+                visible="{pm>/popup/fields/ReviseNote/visible}"
+            />
+            <TextArea
+                value="{dm>/selectedRow/ReviseNote}"
+                rows="3"
+                editable="{pm>/popup/fields/ReviseNote/editable}"
+                visible="{pm>/popup/fields/ReviseNote/visible}"
+            />
+
+            <!-- İptal Notu -->
+            <Label
+                text="{i18n>cancelNote}"
+                visible="{pm>/popup/fields/CancelNote/visible}"
+            />
+            <TextArea
+                value="{dm>/selectedRow/CancelNote}"
+                rows="3"
+                editable="{pm>/popup/fields/CancelNote/editable}"
+                visible="{pm>/popup/fields/CancelNote/visible}"
+            />
+        </VBox>
+
+        <endButton>
+            <Button
+                text="{i18n>btnClose}"
+                press=".onClosePopup"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
