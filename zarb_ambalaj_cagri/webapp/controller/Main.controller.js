@@ -99,8 +99,12 @@ sap.ui.define([
 
         },
 
-        _validateSelection: function (that) {
-            var oTable = that.byId("mainTable");
+        _validateSelection: function (that, tableId) {
+
+            var oTable = (tableId === "mainTable")
+                ? that.byId(tableId)
+                : sap.ui.getCore().byId(tableId);
+
             var aSelectedIndices = oTable.getSelectedIndices();
 
             if (aSelectedIndices.length === 0) {
@@ -116,31 +120,58 @@ sap.ui.define([
             return aSelectedIndices[0];
         },
 
-        _getSelectedRowData: function (that, index) {
-            var oTable = that.byId("mainTable");
+        _getSelectedRowData: function (that, index, tableId) {
+            var oTable = (tableId === "mainTable")
+                ? that.byId(tableId)
+                : sap.ui.getCore().byId(tableId);
+
             var oContext = oTable.getContextByIndex(index);
             return oContext ? oContext.getObject() : null;
         },
 
-        _setSelectedRow: function (that, oRowData) {
+        _setSelectedRow: function (that, oRowData, tableId) {
             var dModel = that.getOModel(that, "dm");
-            dModel.setProperty("/selectedRow", oRowData);
+
+            var sProperty = (tableId === "mainTable")
+                ? "/selectedRow"
+                : "/selectedRowCallList"
+
+            dModel.setProperty(sProperty, oRowData);
         },
 
+        onCallList: function (oEvent) { // ÇAğrı Listesi 
 
-        onChange: function () {
             var that = this;
-            var index = that._validateSelection(that);
+            var index = that._validateSelection(that, "mainTable");
             if (index === null) {
                 return;
             }
 
-            var oRowData = that._getSelectedRowData(that, index);
+            var oRowData = that._getSelectedRowData(that, index, "mainTable");
             if (!oRowData) {
                 return;
             }
 
-            that._setSelectedRow(that, oRowData);
+            that._setSelectedRow(that, oRowData, "mainTable");
+
+            that._oData.getCallList(that);
+
+
+        },
+
+        onChange: function () {
+            var that = this;
+            var index = that._validateSelection(that, "callListTable");
+            if (index === null) {
+                return;
+            }
+
+            var oRowData = that._getSelectedRowData(that, index, "callListTable");
+            if (!oRowData) {
+                return;
+            }
+
+            that._setSelectedRow(that, oRowData, "callListTable");
 
             // pm model state
             var pModel = that.getOModel(that, "pm");
@@ -165,17 +196,28 @@ sap.ui.define([
 
         onAddNewCall: function () {
             var that = this;
-            var index = that._validateSelection(that);
-            if (index === null) {
-                return;
-            }
 
-            var oRowData = that._getSelectedRowData(that, index);
-            if (!oRowData) {
-                return;
-            }
 
-            that._setSelectedRow(that, oRowData);
+            var dModel = that.getOModel(that, "dm");
+            var dData = dModel.getData();
+
+            var selectedRow = dData["selectedRow"];
+
+            const item = {
+                Ebeln: selectedRow.Ebeln,
+                Eindt: selectedRow.Eindt,
+                Meins: selectedRow.Meins,
+                Ebelp: selectedRow.Ebelp,
+                Etenr: selectedRow.Etenr,
+                Logsy: selectedRow.Logsy,
+                ApKey: selectedRow.ApKey,
+                Menge: selectedRow.Menge,
+                Slfdt: selectedRow.Slfdt,
+                Normt: selectedRow.Normt,
+                Lifnr: selectedRow.Lifnr
+            };
+
+            dModel.setProperty("/selectedRowCallList", item);
 
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
@@ -199,17 +241,17 @@ sap.ui.define([
 
         onCancelCall: function () {
             var that = this;
-            var index = that._validateSelection(that);
+            var index = that._validateSelection(that, "callListTable");
             if (index === null) {
                 return;
             }
 
-            var oRowData = that._getSelectedRowData(that, index);
+            var oRowData = that._getSelectedRowData(that, index, "callListTable");
             if (!oRowData) {
                 return;
             }
 
-            that._setSelectedRow(that, oRowData);
+            that._setSelectedRow(that, oRowData, "callListTable");
 
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
@@ -236,6 +278,32 @@ sap.ui.define([
         },
 
 
+        _callListPopup: function () {
+
+
+            var that = this;
+
+            if (!that.CallListPopup) {
+
+                that.CallListPopup = sap.ui.xmlfragment("com.app.abdiibrahim.zarbambalajcagri.view.fragments.CallListPopup", that);
+
+                that.CallListPopup.setModel(that.getView().getModel());
+
+                that.getView().addDependent(that.CallListPopup);
+
+                jQuery.sap.syncStyleClass("sapUiSizeCompact", that.getView(), that.CallListPopup);
+
+            }
+            return that.CallListPopup;
+        },
+
+        onCloseCallListPopup: function () {
+            if (this.CallListPopup) {
+                this.CallListPopup.close();
+            }
+        },
+
+
         _callPopup: function () {
 
 
@@ -259,6 +327,60 @@ sap.ui.define([
             if (this.CallPopup) {
                 this.CallPopup.close();
             }
+        },
+
+
+        // C	Çağrı Oluştur
+        // U	Çağrı Güncelle
+        // D	Çağrı Sil
+        // B	Toplu Çağrı Oluştur
+        // Q	Kota Kontrolü
+
+        onConfirmAdd: function (oEvent) {
+            debugger;
+            var that = this;
+            that._main.checkData(that, 'C');
+
+        },
+
+
+        onConfirmResponse: function (that, response, action) {
+
+            var dModel = that.getOModel(that, "dm");
+            var dData = dModel.getData();
+
+            if (response == 'OK') {
+                debugger;
+                switch (action) {
+                    case 'C':
+
+
+                        that._oData.approveProcess(that, newRow);
+
+                        break;
+                    case 'U':
+
+
+                        break;
+                    case 'D':
+
+
+                        break;
+                    case 'B':
+
+
+                        break;
+                    case 'Q':
+
+
+                        break;
+                    default:
+                        break;
+                }
+
+
+            }
+
         },
 
         // EXCEL İŞLEMLERİ

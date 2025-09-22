@@ -19,6 +19,7 @@ sap.ui.define([
 
 			var dData = {
 				selectedRow: {},
+				selectedRowCallList:{},
 				OrderList: []
 			}
 

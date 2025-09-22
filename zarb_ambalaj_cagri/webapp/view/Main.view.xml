@@ -88,23 +88,9 @@
                                         <Title text="{i18n>tableHeader}" />
                                         <Button
                                             icon="sap-icon://edit"
-                                            text="{i18n>btnChange}"
-                                            press=".onChange"
+                                            text="{i18n>btnCallList}"
+                                            press=".onCallList"
                                             class="orangeButton"
-                                        />
-
-                                        <Button
-                                            icon="sap-icon://add-document"
-                                            text="{i18n>btnAddNewCall}"
-                                            press=".onAddNewCall"
-                                            class="blueButton"
-                                        />
-
-                                        <Button
-                                            icon="sap-icon://delete"
-                                            text="{i18n>btnCancelCall}"
-                                            press=".onCancelCall"
-                                            class="redButton"
                                         />
 
                                         <ToolbarSpacer />

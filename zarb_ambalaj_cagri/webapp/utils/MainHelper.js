@@ -74,6 +74,82 @@ sap.ui.define([
                     debugger;
                 }
             });
+        },
+
+
+        checkData: function (that, action) {
+
+            var dModel = that.getOModel(that, "dm");
+            var dData = dModel.getData();
+
+            var callValues = dData["selectedRowCallList"];
+
+            var oBundle = that.getResourceBundle();
+
+            switch (action) {
+                case 'C':
+
+                    // Zorunlu alanlar → i18n key map
+                    var requiredFields = {
+                        Menge: "quantity",
+                        // Meins: "unit",
+                        // Eindt: "deliveryDate",
+                        FirmaTeslim: "firmDeliveryDate",
+                        Zdrukodu: "printCode"
+                    };
+
+                    var missingLabels = [];
+
+                    Object.keys(requiredFields).forEach(function (field) {
+                        if (!callValues[field] || callValues[field].toString().trim() === "") {
+                            missingLabels.push(oBundle.getText(requiredFields[field]));
+                        }
+                    });
+
+                    if (missingLabels.length > 0) {
+                        MessageBox.error(
+                            oBundle.getText("missing_fields_msg") + "\n\n" + missingLabels.join(", "),
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
+
+                    // Kota kontrolü → dönen değere göre davran
+                    that._oData.checkQuota(that).then(function (quotaOk) {
+                        if (quotaOk === true) {
+                            that.confirmMessageWithActonResponse(that, "confirmAdd", that.onConfirmResponse, 'C'); // Çağrı Oluştur
+                        } else {
+                            return;
+                        }
+                    });
+
+
+                    break;
+                case 'U':
+
+
+                    break;
+                case 'D':
+
+
+                    break;
+                case 'B':
+
+
+                    break;
+                case 'Q':
+
+
+                    break;
+                default:
+                    break;
+            }
+
+
         }
 
 

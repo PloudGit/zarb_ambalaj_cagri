@@ -3,7 +3,7 @@
     xmlns:core="sap.ui.core"
 >
     <Dialog
-        id="popupDialog"
+        id="popupDialogCall"
         title="{pm>/popup/title}"
         stretchOnPhone="true"
         draggable="true"
@@ -16,7 +16,7 @@
                 visible="{pm>/popup/fields/TermItemNum/visible}"
             />
             <Input
-                value="{dm>/selectedRow/Ebelp}"
+                value="{dm>/selectedRowCallList/Ebelp}"
                 editable="{pm>/popup/fields/TermItemNum/editable}"
                 visible="{pm>/popup/fields/TermItemNum/visible}"
             />
@@ -26,7 +26,7 @@
                 visible="{pm>/popup/fields/Quantity/visible}"
             />
             <Input
-                value="{dm>/selectedRow/Menge}"
+                value="{dm>/selectedRowCallList/Menge}"
                 editable="{pm>/popup/fields/Quantity/editable}"
                 visible="{pm>/popup/fields/Quantity/visible}"
             />
@@ -36,7 +36,7 @@
                 visible="{pm>/popup/fields/Unit/visible}"
             />
             <Input
-                value="{dm>/selectedRow/Meins}"
+                value="{dm>/selectedRowCallList/Meins}"
                 editable="{pm>/popup/fields/Unit/editable}"
                 visible="{pm>/popup/fields/Unit/visible}"
             />
@@ -46,7 +46,7 @@
                 visible="{pm>/popup/fields/DeliveryDate/visible}"
             />
             <DatePicker
-                value="{path:'dm>/selectedRow/Eindt', type:'sap.ui.model.type.Date'}"
+                value="{path:'dm>/selectedRowCallList/Eindt', type:'sap.ui.model.type.Date'}"
                 displayFormat="short"
                 editable="{pm>/popup/fields/DeliveryDate/editable}"
                 visible="{pm>/popup/fields/DeliveryDate/visible}"
@@ -57,7 +57,7 @@
                 visible="{pm>/popup/fields/FirmDelivery/visible}"
             />
             <DatePicker
-                value="{path:'dm>/selectedRow/FirmaTeslim', type:'sap.ui.model.type.Date'}"
+                value="{path:'dm>/selectedRowCallList/FirmaTeslim', type:'sap.ui.model.type.Date'}"
                 displayFormat="short"
                 editable="{pm>/popup/fields/FirmDelivery/editable}"
                 visible="{pm>/popup/fields/FirmDelivery/visible}"
@@ -68,7 +68,7 @@
                 visible="{pm>/popup/fields/PrintCode/visible}"
             />
             <Input
-                value="{dm>/selectedRow/Zdrukodu}"
+                value="{dm>/selectedRowCallList/Zdrukodu}"
                 editable="{pm>/popup/fields/PrintCode/editable}"
                 visible="{pm>/popup/fields/PrintCode/visible}"
             />
@@ -78,7 +78,7 @@
                 visible="{pm>/popup/fields/ReviseNote/visible}"
             />
             <TextArea
-                value="{dm>/selectedRow/ReviseNote}"
+                value="{dm>/selectedRowCallList/ReviseNote}"
                 rows="5"
                 width="100%"
                 growing="true"
@@ -91,7 +91,7 @@
                 visible="{pm>/popup/fields/CancelNote/visible}"
             />
             <TextArea
-                value="{dm>/selectedRow/CancelNote}"
+                value="{dm>/selectedRowCallList/CancelNote}"
                 rows="5"
                 width="100%"
                 growing="true"
