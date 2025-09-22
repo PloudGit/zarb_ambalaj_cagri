@@ -35,7 +35,6 @@ sap.ui.define([
                     var oFB = oEvent.srcControl;
                     var oResourceBundle = that.getOwnerComponent().getModel("i18n").getResourceBundle();
 
-                    // Go / Listele Butonu
                     if (oFB._oSearchButton) {
                         oFB._oSearchButton.setText(oResourceBundle.getText("goButtonText"));
                         oFB._oSearchButton.setIcon("sap-icon://search");
@@ -44,13 +43,11 @@ sap.ui.define([
                         oFB._oSearchButton.addStyleClass("greenButton");
                     }
 
-                    // Filters butonu
                     if (oFB._oFiltersButton) {
                         oFB._oFiltersButton.setType(sap.m.ButtonType.Transparent);
                         oFB._oFiltersButton.addStyleClass("blueButton");
                     }
 
-                    // Hide/Show Filters butonu
                     if (oFB._oHideShowButton) {
                         oFB._oHideShowButton.setType(sap.m.ButtonType.Transparent);
                         oFB._oHideShowButton.addStyleClass("yellowButton");

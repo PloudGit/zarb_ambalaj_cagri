@@ -8,6 +8,7 @@ sap.ui.define([
     "com/app/abdiibrahim/zarbambalajcagri/utils/Mapping",
     "com/app/abdiibrahim/zarbambalajcagri/utils/formatter",
     "sap/ui/model/BindingMode",
+    "sap/ui/export/Spreadsheet",
     "sap/m/HBox",
     "sap/m/VBox",
     "sap/m/Text",
@@ -21,6 +22,7 @@ sap.ui.define([
     Mapping,
     formatter,
     BindingMode,
+    Spreadsheet,
     HBox,
     VBox,
     Text,
@@ -77,7 +79,7 @@ sap.ui.define([
 
             var oScroll = this.byId("mainScrollContainer");
             if (oScroll) {
-                // Ekran yukarı scroll edilir
+                // Ekran yukarı scroll 
                 oScroll.scrollTo(0, 0, 0); // (x, y, duration)
             }
         },
@@ -156,7 +158,7 @@ sap.ui.define([
                     CancelNote: { visible: false, editable: false }
                 }
             });
-            
+
             that._callPopup().open();
 
         },
@@ -257,7 +259,132 @@ sap.ui.define([
             if (this.CallPopup) {
                 this.CallPopup.close();
             }
+        },
+
+        // EXCEL İŞLEMLERİ
+
+        onExcelDownloadMainTable: function () {
+            var that = this;
+            var oTable = this.getView().byId("mainTable");
+            var oBinding = oTable.getBinding("rows").oList;
+
+            var i18n = this.getView().getModel("i18n").getResourceBundle();
+            var fileName = i18n.getText("orderListExport");
+
+            // Formatlama gerekiyorsa burada map edebilirsin
+            var aFormattedData = oBinding.map(function (item) {
+                return Object.assign({}, item, {
+                    Menge: that.formatters.formatDecimal(item.Menge),
+                    Sevkm: that.formatters.formatDecimal(item.Sevkm)
+                });
+            });
+
+            var aCols = this.createMainTableColumnConfig();
+
+            var oSettings = {
+                workbook: {
+                    columns: aCols,
+                    context: {
+                        sheetName: i18n.getText("orderList")
+                    }
+                },
+                dataSource: aFormattedData,
+                fileName: fileName
+            };
+
+            var oSheet = new sap.ui.export.Spreadsheet(oSettings);
+            oSheet.build().finally(function () {
+                oSheet.destroy();
+            });
+        },
+
+        createMainTableColumnConfig: function () {
+            var i18n = this.getView().getModel("i18n").getResourceBundle();
+
+            var aCols = [
+                {
+                    label: i18n.getText("sasNumber"),
+                    property: "Ebeln",
+                    type: "string",
+                    width: 15
+                },
+                {
+                    label: i18n.getText("itemNumber"),
+                    property: "Ebelp",
+                    type: "string",
+                    width: 10
+                },
+                {
+                    label: i18n.getText("materialCode"),
+                    property: "Matnr",
+                    type: "string",
+                    width: 15
+                },
+                {
+                    label: i18n.getText("materialDesc"),
+                    property: "Txt01",
+                    type: "string",
+                    width: 40
+                },
+                {
+                    label: i18n.getText("supplier"),
+                    property: "Lifnr",
+                    type: "string",
+                    width: 15
+                },
+                {
+                    label: i18n.getText("supplierName"),
+                    property: "Name1",
+                    type: "string",
+                    width: 30
+                },
+                {
+                    label: i18n.getText("quantity"),
+                    property: "Menge",
+                    type: "number",
+                    width: 12
+                },
+                {
+                    label: i18n.getText("unit"),
+                    property: "Meins",
+                    type: "string",
+                    width: 8
+                },
+                {
+                    label: i18n.getText("remainingQty"),
+                    property: "Sevkm",
+                    type: "number",
+                    width: 12
+                },
+                {
+                    label: i18n.getText("printCode"),
+                    property: "Zdrukodu",
+                    type: "string",
+                    width: 15
+                },
+                {
+                    label: i18n.getText("firmDeliveryDate"),
+                    property: "Eindt",
+                    type: "date",
+                    width: 15
+                },
+                {
+                    label: i18n.getText("status"),
+                    property: "Status",
+                    type: "string",
+                    width: 15
+                },
+                {
+                    label: i18n.getText("note"),
+                    property: "Note",
+                    type: "string",
+                    width: 50
+                }
+            ];
+
+            return aCols;
         }
+        // EXCEL İŞLEMLERİ        
 
     });
 });

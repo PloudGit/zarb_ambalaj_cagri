@@ -35,39 +35,30 @@
                                         search=".onSearch"
                                     >
                                         <smartFilterBar:controlConfiguration>
-                                            <!-- Tedarikçi -->
                                             <smartFilterBar:ControlConfiguration
                                                 key="Lifnr"
                                                 label="{i18n>supplier}"
                                                 index="1"
                                                 visibleInAdvancedArea="true"
                                             />
-
-                                            <!-- SAS Numarası -->
                                             <smartFilterBar:ControlConfiguration
                                                 key="Ebeln"
                                                 label="{i18n>sasNumber}"
                                                 index="2"
                                                 visibleInAdvancedArea="true"
                                             />
-
-                                            <!-- Malzeme Kodu -->
                                             <smartFilterBar:ControlConfiguration
                                                 key="Matnr"
                                                 label="{i18n>materialCode}"
                                                 index="3"
                                                 visibleInAdvancedArea="true"
                                             />
-
-                                            <!-- Üretim Yeri -->
                                             <smartFilterBar:ControlConfiguration
                                                 key="Werks"
                                                 label="{i18n>plant}"
                                                 index="4"
                                                 visibleInAdvancedArea="true"
                                             />
-
-                                            <!-- Ölçü Birimi -->
                                             <smartFilterBar:ControlConfiguration
                                                 key="Meins"
                                                 label="{i18n>unit}"
@@ -126,7 +117,7 @@
                                         <Button
                                             icon="sap-icon://download"
                                             text="{i18n>export}"
-                                            press=".onExport"
+                                            press=".onExcelDownloadMainTable"
                                             class="yellowButton"
                                         />
                                     </Toolbar>
@@ -196,7 +187,7 @@
                                         </t:template>
                                     </t:Column>
 
-                                    <!-- Editable: PrintCode -->
+                                    <!-- <editable> -->
                                     <t:Column>
                                         <Label text="{i18n>printCode}" />
                                         <t:template>
@@ -213,7 +204,7 @@
                                             />
                                         </t:template>
                                     </t:Column>
-
+                                    <!-- <editable> -->
                                     <t:Column>
                                         <Label text="{i18n>status}" />
                                         <t:template>
