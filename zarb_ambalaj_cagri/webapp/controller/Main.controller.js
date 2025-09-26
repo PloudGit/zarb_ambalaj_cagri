@@ -422,6 +422,7 @@ sap.ui.define([
             });
         },
 
+        
         createMainTableColumnConfig: function () {
             var i18n = this.getView().getModel("i18n").getResourceBundle();
 
