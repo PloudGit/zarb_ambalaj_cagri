@@ -354,8 +354,10 @@ sap.ui.define([
                 switch (action) {
                     case 'C':
 
-
-                        that._oData.approveProcess(that, newRow);
+                        // tekli create işlemi 
+                        debugger;
+                        var data = dModel.getProperty("/checkedTrueCallData");
+                        that._oData.approveProcess(that, data);
 
                         break;
                     case 'U':

@@ -156,6 +156,10 @@ sap.ui.define([
 						// Servisten dönen sonuca göre kontrol
 						if (oData && oData.IsExceed !== true) {
 							resolve(true);  // işlem devam etsin
+
+							// veriyi create e göndermek için tekrar manipule etmeyelim direkt modelden alsın 
+							dModel.setProperty("/checkedTrueCallData", data);
+
 						} else {
 							resolve(false); // mesaj verilecek
 						}
@@ -172,7 +176,36 @@ sap.ui.define([
 				});
 
 			});
-		}
+		},
+
+
+		approveProcess: function (that, data) {
+
+			var url = "/CgrHeaderSet";
+
+			debugger;
+			var oDataModel = that.getOwnerComponent().getModel();
+			that.openBusyDialog();
+			oDataModel.create(url, data, {
+				success: function (oData, oResponse) {
+
+					debugger;
+					that.closeBusyDialog();
+
+					// that._main.approveSuccessInformation(that, oData);
+
+				},
+				error: function (oError) {
+					debugger;
+					// that.openMessagePopover(that);
+					that.closeBusyDialog();
+					that._oData.handleODataErrors(that);
+
+				}
+			});
+
+		},
+
 
 
 
