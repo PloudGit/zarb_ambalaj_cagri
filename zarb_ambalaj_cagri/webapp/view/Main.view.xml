@@ -155,7 +155,12 @@
                                     <t:Column sortProperty="Menge">
                                         <Label text="{i18n>quantity}" />
                                         <t:template>
-                                            <Text text="{dm>Menge}" />
+                                            <Text
+                                                text="{
+                                                path: 'dm>Menge',
+                                                formatter: '.formatters.formatDecimal'
+                                            }"
+                                            />
                                         </t:template>
                                     </t:Column>
 
@@ -166,10 +171,15 @@
                                         </t:template>
                                     </t:Column>
 
-                                    <t:Column sortProperty="Sevkm">
+                                    <t:Column sortProperty="RestMenge">
                                         <Label text="{i18n>remainingQty}" />
                                         <t:template>
-                                            <Text text="{dm>Sevkm}" />
+                                            <Text
+                                                text="{
+                                                path: 'dm>RestMenge',
+                                                formatter: '.formatters.formatDecimal'
+                                            }"
+                                            />
                                         </t:template>
                                     </t:Column>
 
@@ -177,7 +187,7 @@
                                     <t:Column>
                                         <Label text="{i18n>printCode}" />
                                         <t:template>
-                                            <Input value="{dm>Zdrukodu}" />
+                                            <Input value="{dm>Normt}" />
                                         </t:template>
                                     </t:Column>
 
@@ -185,8 +195,13 @@
                                         <Label text="{i18n>firmDeliveryDate}" />
                                         <t:template>
                                             <DatePicker
-                                                value="{path: 'dm>Eindt', type: 'sap.ui.model.type.Date'}"
-                                                displayFormat="short"
+                                                value="{
+                                                path: 'dm>Slfdt',
+                                                type: 'sap.ui.model.odata.type.DateTime',
+                                                formatOptions: {
+                                                    pattern: 'dd.MM.yyyy'
+                                                }
+                                            }"
                                             />
                                         </t:template>
                                     </t:Column>
@@ -194,14 +209,14 @@
                                     <t:Column>
                                         <Label text="{i18n>status}" />
                                         <t:template>
-                                            <Text text="{dm>Status}" />
+                                            <Text text="{dm>Statu}" />
                                         </t:template>
                                     </t:Column>
 
                                     <t:Column>
                                         <Label text="{i18n>note}" />
                                         <t:template>
-                                            <Text text="{dm>Note}" />
+                                            <Text text="{dm>StatText}" />
                                         </t:template>
                                     </t:Column>
                                 </t:columns>

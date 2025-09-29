@@ -99,6 +99,13 @@ sap.ui.define([
 
         },
 
+        onSave: function (oEvent) {
+            debugger;
+            var that = this;
+            that._main.checkData(that, 'B');
+
+        },
+
         _validateSelection: function (that, tableId) {
 
             var oTable = (tableId === "mainTable")
@@ -190,6 +197,9 @@ sap.ui.define([
                 }
             });
 
+            var dModel = that.getOModel(that, "dm");
+            dModel.setProperty("/ReviseNote", "");
+
             that._callPopup().open();
 
         },
@@ -269,6 +279,9 @@ sap.ui.define([
                 }
             });
 
+            var dModel = that.getOModel(that, "dm");
+            dModel.setProperty("/CancelNote", "");
+
             that._callPopup().open();
 
         },
@@ -325,6 +338,7 @@ sap.ui.define([
 
         onClosePopup: function () {
             if (this.CallPopup) {
+                this._oData.getCallList(this);
                 this.CallPopup.close();
             }
         },
@@ -343,11 +357,46 @@ sap.ui.define([
 
         },
 
+        onConfirmChange: function (oEvent) {
+            var that = this;
+            that._main.checkData(that, 'U');
+
+        },
+
+        onConfirmCancel: function (oEvent) {
+            var that = this;
+            that._main.checkData(that, 'D');
+
+        },
 
         onConfirmResponse: function (that, response, action) {
 
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
+            const row = dModel.getProperty("/selectedRowCallList");
+            const item = {
+                Ebeln: row.Ebeln,
+                Eindt: row.Eindt,
+                Meins: row.Meins,
+                Ebelp: row.Ebelp,
+                Etenr: row.Etenr,
+                Logsy: row.Logsy,
+                ApKey: row.ApKey,
+                Menge: row.Menge,
+                Slfdt: row.Slfdt,
+                Normt: row.Normt,
+                Lifnr: row.Lifnr
+            };
+
+            var data = {
+                "Ebeln": row.Ebeln,
+                "Ebelp": row.Ebelp,
+                "Logsy": row.Logsy,
+                "ApKey": row.ApKey,
+                "ReviseNote": dData["ReviseNote"],
+                "CancelNote": dData["CancelNote"],
+                "ToCgrItems": [item]
+            };
 
             if (response == 'OK') {
                 debugger;
@@ -356,21 +405,29 @@ sap.ui.define([
 
                         // tekli create işlemi 
                         debugger;
-                        var data = dModel.getProperty("/checkedTrueCallData");
+                        // var data = dModel.getProperty("/checkedTrueCallData");
+                        data.Action = 'C';
                         that._oData.approveProcess(that, data);
 
                         break;
                     case 'U':
 
+                        data.Action = 'U';
+                        data.ToCgrItems[0].Desc = dData["ReviseNote"];
+                        that._oData.approveProcess(that, data);
 
                         break;
                     case 'D':
 
+                        data.Action = 'D';
+                        data.ToCgrItems[0].Desc = dData["CancelNote"];
+                        that._oData.approveProcess(that, data);
 
                         break;
                     case 'B':
-
-
+                        var checkedData = dModel.getProperty("/checkedTrueCallData");
+                        checkedData.Action = 'B';
+                        that._oData.approveProcess(that, checkedData);
                         break;
                     case 'Q':
 
@@ -422,7 +479,7 @@ sap.ui.define([
             });
         },
 
-        
+
         createMainTableColumnConfig: function () {
             var i18n = this.getView().getModel("i18n").getResourceBundle();
 

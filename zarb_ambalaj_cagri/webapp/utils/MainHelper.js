@@ -83,19 +83,19 @@ sap.ui.define([
             var dData = dModel.getData();
 
             var callValues = dData["selectedRowCallList"];
+            var orderList = dData["OrderList"]
 
             var oBundle = that.getResourceBundle();
 
             switch (action) {
                 case 'C':
 
-                    // Zorunlu alanlar → i18n key map
                     var requiredFields = {
                         Menge: "quantity",
                         // Meins: "unit",
                         // Eindt: "deliveryDate",
-                        FirmaTeslim: "firmDeliveryDate",
-                        Zdrukodu: "printCode"
+                        Slfdt: "firmDeliveryDate",
+                        Normt: "printCode"
                     };
 
                     var missingLabels = [];
@@ -131,13 +131,56 @@ sap.ui.define([
                     break;
                 case 'U':
 
+                    that.confirmMessageWithActonResponse(that, "confirmUpdate", that.onConfirmResponse, 'U');
 
                     break;
                 case 'D':
 
+                    that.confirmMessageWithActonResponse(that, "confirmDelete", that.onConfirmResponse, 'D');
 
                     break;
                 case 'B':
+
+                    var missingMessages = [];
+
+                    orderList.forEach(function (row, index) {
+                        var rowMissing = [];
+
+                        if (!row.Normt || row.Normt.toString().trim() === "") {
+                            rowMissing.push(oBundle.getText("printCode")); // i18n key
+                        }
+                        if (!row.Slfdt || row.Slfdt.toString().trim() === "") {
+                            rowMissing.push(oBundle.getText("firmDeliveryDate"));
+                        }
+
+                        if (rowMissing.length > 0) {
+                            // Satır bilgisini da ekle (ör. sıra numarası + kolon adları)
+                            missingMessages.push(
+                                oBundle.getText("row_label", [index + 1]) + ": " + rowMissing.join(", ")
+                            );
+                        }
+                    });
+
+                    if (missingMessages.length > 0) {
+                        MessageBox.error(
+                            oBundle.getText("missing_fields_msg") + "\n\n" + missingMessages.join("\n"),
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
+
+                    that._oData.checkQuotaAll(that).then(function (quotaOk) {
+                        if (quotaOk === true) {
+                            that.confirmMessageWithActonResponse(that, "confirmMultiAdd", that.onConfirmResponse, 'B');
+                        } else {
+                            return;
+                        }
+                    });
+
 
 
                     break;

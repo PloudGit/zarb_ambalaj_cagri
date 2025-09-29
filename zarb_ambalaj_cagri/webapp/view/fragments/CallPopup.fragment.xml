@@ -16,7 +16,7 @@
                 visible="{pm>/popup/fields/TermItemNum/visible}"
             />
             <Input
-                value="{dm>/selectedRowCallList/Ebelp}"
+                value="{dm>/selectedRowCallList/Etenr}"
                 editable="{pm>/popup/fields/TermItemNum/editable}"
                 visible="{pm>/popup/fields/TermItemNum/visible}"
             />
@@ -26,7 +26,9 @@
                 visible="{pm>/popup/fields/Quantity/visible}"
             />
             <Input
-                value="{dm>/selectedRowCallList/Menge}"
+                value="{path: 'dm>/selectedRowCallList/Menge',
+                        formatter: '.formatters.formatDecimal'
+                                            }"
                 editable="{pm>/popup/fields/Quantity/editable}"
                 visible="{pm>/popup/fields/Quantity/visible}"
             />
@@ -46,7 +48,12 @@
                 visible="{pm>/popup/fields/DeliveryDate/visible}"
             />
             <DatePicker
-                value="{path:'dm>/selectedRowCallList/Eindt', type:'sap.ui.model.type.Date'}"
+                value="{path: 'dm>/selectedRowCallList/Eindt',
+                        type: 'sap.ui.model.odata.type.DateTime',
+                        formatOptions: {
+                        pattern: 'dd.MM.yyyy'
+                                                }
+                                            }"
                 displayFormat="short"
                 editable="{pm>/popup/fields/DeliveryDate/editable}"
                 visible="{pm>/popup/fields/DeliveryDate/visible}"
@@ -57,7 +64,12 @@
                 visible="{pm>/popup/fields/FirmDelivery/visible}"
             />
             <DatePicker
-                value="{path:'dm>/selectedRowCallList/FirmaTeslim', type:'sap.ui.model.type.Date'}"
+                value="{ path: 'dm>/selectedRowCallList/Slfdt',
+                         type: 'sap.ui.model.odata.type.DateTime',
+                         formatOptions: {
+                         pattern: 'dd.MM.yyyy'
+                                                }
+                                            }"
                 displayFormat="short"
                 editable="{pm>/popup/fields/FirmDelivery/editable}"
                 visible="{pm>/popup/fields/FirmDelivery/visible}"
@@ -68,7 +80,7 @@
                 visible="{pm>/popup/fields/PrintCode/visible}"
             />
             <Input
-                value="{dm>/selectedRowCallList/Zdrukodu}"
+                value="{dm>/selectedRowCallList/Normt}"
                 editable="{pm>/popup/fields/PrintCode/editable}"
                 visible="{pm>/popup/fields/PrintCode/visible}"
             />
@@ -78,7 +90,7 @@
                 visible="{pm>/popup/fields/ReviseNote/visible}"
             />
             <TextArea
-                value="{dm>/selectedRowCallList/ReviseNote}"
+                value="{dm>/ReviseNote}"
                 rows="5"
                 width="100%"
                 growing="true"
@@ -91,7 +103,7 @@
                 visible="{pm>/popup/fields/CancelNote/visible}"
             />
             <TextArea
-                value="{dm>/selectedRowCallList/CancelNote}"
+                value="{dm>/CancelNote}"
                 rows="5"
                 width="100%"
                 growing="true"

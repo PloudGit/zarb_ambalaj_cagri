@@ -51,17 +51,22 @@
                 </t:toolbar>
 
                 <t:columns>
-                    <t:Column sortProperty="Ebelp">
+                    <t:Column sortProperty="Etenr">
                         <Label text="{i18n>terminItemNo}" />
                         <t:template>
-                            <Text text="{dm>Ebelp}" />
+                            <Text text="{dm>Etenr}" />
                         </t:template>
                     </t:Column>
 
                     <t:Column sortProperty="Menge">
                         <Label text="{i18n>quantity}" />
                         <t:template>
-                            <Text text="{dm>Menge}" />
+                            <Text
+                                text="{
+                                                path: 'dm>Menge',
+                                                formatter: '.formatters.formatDecimal'
+                                            }"
+                            />
                         </t:template>
                     </t:Column>
 
@@ -76,17 +81,31 @@
                         <Label text="{i18n>deliveryDate}" />
                         <t:template>
                             <DatePicker
-                                value="{path: 'dm>Eindt', type: 'sap.ui.model.type.Date'}"
+                                value="{
+                                                path: 'dm>Eindt',
+                                                type: 'sap.ui.model.odata.type.DateTime',
+                                                formatOptions: {
+                                                    pattern: 'dd.MM.yyyy'
+                                                }
+                                            }"
                                 displayFormat="short"
+                                editable="false"
                             />
                         </t:template>
                     </t:Column>
 
-                    <t:Column sortProperty="Firmdt">
+                    <t:Column sortProperty="Slfdt">
                         <Label text="{i18n>firmDeliveryDate}" />
                         <t:template>
                             <DatePicker
-                                value="{path: 'dm>Firmdt', type: 'sap.ui.model.type.Date'}"
+                                value="{
+                                                path: 'dm>Slfdt',
+                                                type: 'sap.ui.model.odata.type.DateTime',
+                                                formatOptions: {
+                                                    pattern: 'dd.MM.yyyy'
+                                                }
+                                            }"
+                                editable="false"
                                 displayFormat="short"
                             />
                         </t:template>
@@ -95,7 +114,10 @@
                     <t:Column>
                         <Label text="{i18n>printCode}" />
                         <t:template>
-                            <Input value="{dm>Zdrukodu}" />
+                            <Input
+                                value="{dm>Normt}"
+                                editable="false"
+                            />
                         </t:template>
                     </t:Column>
                 </t:columns>

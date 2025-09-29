@@ -158,6 +158,68 @@ sap.ui.define([
 							resolve(true);  // işlem devam etsin
 
 							// veriyi create e göndermek için tekrar manipule etmeyelim direkt modelden alsın 
+							// dModel.setProperty("/checkedTrueCallData", data);
+
+						} else {
+							resolve(false); // mesaj verilecek
+						}
+						that.closeBusyDialog();
+					},
+					error: function (oError) {
+						that.closeBusyDialog();
+
+						that._oData.handleODataErrors(that);
+						resolve(false);
+
+					}
+
+				});
+
+			});
+		},
+
+		checkQuotaAll: function (that) {
+			return new Promise(function (resolve, reject) {
+
+				var url = "/CgrHeaderSet";
+				const dModel = that.getOModel(that, "dm");
+				const orders = dModel.getData().OrderList || [];
+		
+				// OrderList içinden payload hazırlama
+				const items = orders.map(order => ({
+					Ebeln: order.Ebeln,
+					Eindt: order.Eindt,
+					Meins: order.Meins,
+					Ebelp: order.Ebelp,
+					Etenr: order.Etenr,
+					Logsy: order.Logsy,
+					ApKey: order.ApKey,
+					Menge: order.Menge,
+					Slfdt: order.Slfdt,
+					Normt: order.Normt,
+					Lifnr: order.Lifnr
+				}));
+		
+				const data = {
+					Action: "Q",
+					Ebeln: orders[0].Ebeln,
+					Ebelp: orders[0].Ebelp,
+					Logsy: orders[0].Logsy,
+					ApKey: orders[0].ApKey,  
+					ToCgrItems: items
+				};
+
+				var oDataModel = that.getOwnerComponent().getModel();
+
+				that.openBusyDialog();
+
+				debugger;
+				oDataModel.create(url, data, {
+					success: function (oData, oResponse) {
+						debugger;
+						if (oData && oData.IsExceed !== true) {
+							resolve(true); 
+							// veriyi create e göndermek için tekrar manipule etmeyelim direkt modelden alsın 
 							dModel.setProperty("/checkedTrueCallData", data);
 
 						} else {

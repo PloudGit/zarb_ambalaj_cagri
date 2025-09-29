@@ -18,6 +18,8 @@ sap.ui.define([
 
 
 			var dData = {
+				ReviseNote:"",
+				CancelNote:"",
 				selectedRow: {},
 				selectedRowCallList:{},
 				OrderList: []
