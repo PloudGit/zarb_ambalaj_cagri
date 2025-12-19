@@ -224,7 +224,8 @@ sap.ui.define([
                 Menge: selectedRow.Menge,
                 Slfdt: selectedRow.Slfdt,
                 Normt: selectedRow.Normt,
-                Lifnr: selectedRow.Lifnr
+                Lifnr: selectedRow.Lifnr,
+                Matnr: selectedRow.Matnr
             };
 
             dModel.setProperty("/selectedRowCallList", item);

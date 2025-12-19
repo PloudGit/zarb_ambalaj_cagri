@@ -117,6 +117,24 @@ sap.ui.define([
                         );
                         return;
                     }
+                    debugger;
+
+                    //printCode içinde malzeme kodu geçiyor mu?
+                    var materialCode = callValues.Matnr || "";
+                    var printCode = callValues.Normt || "";
+
+                    if (!printCode.includes(materialCode)) {
+                        MessageBox.error(
+                            oBundle.getText("printcode_material_mismatch"), // <-- i18n key
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
+
 
                     // Kota kontrolü → dönen değere göre davran
                     that._oData.checkQuota(that).then(function (quotaOk) {
@@ -151,6 +169,11 @@ sap.ui.define([
                         }
                         if (!row.Slfdt || row.Slfdt.toString().trim() === "") {
                             rowMissing.push(oBundle.getText("firmDeliveryDate"));
+                        }
+
+                        // printkod kontrolü 
+                        if (row.Normt && row.Matnr && !row.Normt.includes(row.Matnr)) {
+                            rowMissing.push(oBundle.getText("printcode_material_mismatch"));
                         }
 
                         if (rowMissing.length > 0) {
@@ -192,8 +215,44 @@ sap.ui.define([
                     break;
             }
 
+        },
 
+
+        approveSuccessInformation: function (that, data) {
+            var i18n = that.getView().getModel("i18n").getResourceBundle();
+            var successTitle = i18n.getText("Success");
+            var dModel = that.getOModel(that, "dm");
+            var oSmartFilterBar = that.byId("smartFilterBar");
+        
+            if (data.Action === 'B') {
+                // Toplu çağrı - OrderList yeniden yüklenecek
+                MessageBox.success(i18n.getText("bulkCallCreatedSuccessfully"), {
+                    title: successTitle,
+                    onClose: function () {
+                        if (oSmartFilterBar) {
+                            var aFilters = oSmartFilterBar.getFilters();
+                            that._oData.getOrderList(that, aFilters);
+                        }
+                    }
+                });
+            } else {
+                // Diğer tüm aksiyonlar - Popup kapat, CallList'i yenile
+                if (that.CallPopup) {
+                    that.CallPopup.close();
+                }
+        
+                MessageBox.success(i18n.getText("processSuccesfullyDone"), {
+                    title: successTitle,
+                    onClose: function () {
+                        that._oData.getCallList(that);
+                    }
+                });
+            }
         }
+        
+        
+
+
 
 
     });
