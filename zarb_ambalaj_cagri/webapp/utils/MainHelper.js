@@ -135,6 +135,27 @@ sap.ui.define([
                         return;
                     }
 
+                    // geçmiş tarih kontrolü
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0); // sadece tarih karşılaştır
+
+                    if (callValues.Slfdt) {
+                        var slfdt = new Date(callValues.Slfdt);
+                        slfdt.setHours(0, 0, 0, 0);
+
+                        if (slfdt < today) {
+                            MessageBox.error(
+                                oBundle.getText("row_label", [1]) + ": " + oBundle.getText("slfdat_not_before_today"),
+                                {
+                                    title: oBundle.getText("missing_fields_title"),
+                                    actions: [MessageBox.Action.OK],
+                                    emphasizedAction: MessageBox.Action.OK
+                                }
+                            );
+                            return;
+                        }
+                    }
+
 
                     // Kota kontrolü → dönen değere göre davran
                     that._oData.checkQuota(that).then(function (quotaOk) {
@@ -195,6 +216,37 @@ sap.ui.define([
                         );
                         return;
                     }
+                    // Geçmiş tarih kontrolü (toplu)
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0); // sadece tarih karşılaştır
+
+                    var pastDateMessages = [];
+
+                    orderList.forEach((element, index) => {
+                        if (element.Slfdt) {
+                            var slfdt = new Date(element.Slfdt);
+                            slfdt.setHours(0, 0, 0, 0);
+
+                            if (slfdt < today) {
+                                pastDateMessages.push(
+                                    oBundle.getText("row_label", [index + 1]) + ": " + oBundle.getText("slfdat_not_before_today")
+                                );
+                            }
+                        }
+                    });
+
+                    // Varsa hatalı tarihleri göster
+                    if (pastDateMessages.length > 0) {
+                        MessageBox.error(
+                            oBundle.getText("missing_fields_msg") + "\n\n" + pastDateMessages.join("\n"),
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
 
                     that._oData.checkQuotaAll(that).then(function (quotaOk) {
                         if (quotaOk === true) {
@@ -223,7 +275,7 @@ sap.ui.define([
             var successTitle = i18n.getText("Success");
             var dModel = that.getOModel(that, "dm");
             var oSmartFilterBar = that.byId("smartFilterBar");
-        
+
             if (data.Action === 'B') {
                 // Toplu çağrı - OrderList yeniden yüklenecek
                 MessageBox.success(i18n.getText("bulkCallCreatedSuccessfully"), {
@@ -240,7 +292,7 @@ sap.ui.define([
                 if (that.CallPopup) {
                     that.CallPopup.close();
                 }
-        
+
                 MessageBox.success(i18n.getText("processSuccesfullyDone"), {
                     title: successTitle,
                     onClose: function () {
@@ -249,8 +301,8 @@ sap.ui.define([
                 });
             }
         }
-        
-        
+
+
 
 
 
