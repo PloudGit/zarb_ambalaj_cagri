@@ -89,6 +89,11 @@ sap.ui.define([
 				aFilters.push(new sap.ui.model.Filter("Ebelp", sap.ui.model.FilterOperator.EQ, selectedRowCallList.Ebelp));
 			}
 
+			if (selectedRowCallList.Etenr) {
+				aFilters.push(new sap.ui.model.Filter("Etenr", sap.ui.model.FilterOperator.EQ, selectedRowCallList.Etenr));
+			}
+
+
 			that.openBusyDialog();
 
 			oDataModel.read(url, {
@@ -113,6 +118,9 @@ sap.ui.define([
 		},
 
 		checkQuota: function (that) {
+			var callMengeInput = sap.ui.getCore().byId("callMenge");
+	        var callMengeValue = callMengeInput["_lastValue"];
+
 			return new Promise(function (resolve, reject) {
 
 				var url = "/CgrHeaderSet";
@@ -130,7 +138,7 @@ sap.ui.define([
 					Etenr: row.Etenr,
 					Logsy: row.Logsy,
 					ApKey: row.ApKey,
-					Menge: row.Menge,
+					Menge: callMengeValue,
 					Slfdt: row.Slfdt,
 					Normt: row.Normt,
 					Lifnr: row.Lifnr

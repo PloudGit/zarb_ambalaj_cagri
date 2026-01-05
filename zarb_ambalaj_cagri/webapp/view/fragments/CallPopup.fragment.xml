@@ -25,7 +25,9 @@
                 text="{i18n>quantity}"
                 visible="{pm>/popup/fields/Quantity/visible}"
             />
+
             <Input
+                id="callMenge"
                 value="{path: 'dm>/selectedRowCallList/Menge',
                         formatter: '.formatters.formatDecimal'
                                             }"

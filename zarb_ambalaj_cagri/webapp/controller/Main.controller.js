@@ -221,7 +221,7 @@ sap.ui.define([
                 Etenr: selectedRow.Etenr,
                 Logsy: selectedRow.Logsy,
                 ApKey: selectedRow.ApKey,
-                Menge: selectedRow.Menge,
+                Menge: "0",
                 Slfdt: selectedRow.Slfdt,
                 Normt: selectedRow.Normt,
                 Lifnr: selectedRow.Lifnr,
@@ -371,10 +371,13 @@ sap.ui.define([
         },
 
         onConfirmResponse: function (that, response, action) {
+            debugger;
 
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
             const row = dModel.getProperty("/selectedRowCallList");
+            var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"]
+
             const item = {
                 Ebeln: row.Ebeln,
                 Eindt: row.Eindt,
@@ -383,7 +386,7 @@ sap.ui.define([
                 Etenr: row.Etenr,
                 Logsy: row.Logsy,
                 ApKey: row.ApKey,
-                Menge: row.Menge,
+                Menge: callMenge,
                 Slfdt: row.Slfdt,
                 Normt: row.Normt,
                 Lifnr: row.Lifnr
