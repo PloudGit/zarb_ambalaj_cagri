@@ -83,6 +83,8 @@ sap.ui.define([
             var dData = dModel.getData();
 
             var callValues = dData["selectedRowCallList"];
+            var cancelNote = dData["CancelNote"];
+            var reviseNote = dData["ReviseNote"];
             var orderList = dData["OrderList"]
 
             var oBundle = that.getResourceBundle();
@@ -170,11 +172,34 @@ sap.ui.define([
 
                     break;
                 case 'U':
-
+                    if (!reviseNote || reviseNote.toString().trim() === "") {
+                        MessageBox.error(
+                            oBundle.getText("revise_note_required_msg"), // <-- i18n key, bunu i18n dosyana eklemelisin
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
                     that.confirmMessageWithActonResponse(that, "confirmUpdate", that.onConfirmResponse, 'U');
 
                     break;
                 case 'D':
+
+                    if (!cancelNote || cancelNote.toString().trim() === "") {
+                        MessageBox.error(
+                            oBundle.getText("cancel_note_required_msg"), // <-- i18n key, bunu i18n dosyana eklemelisin
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
+
 
                     that.confirmMessageWithActonResponse(that, "confirmDelete", that.onConfirmResponse, 'D');
 
