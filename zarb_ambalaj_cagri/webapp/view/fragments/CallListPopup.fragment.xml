@@ -21,6 +21,7 @@
                 enableColumnReordering="true"
                 enableCellFilter="true"
                 width="100%"
+                noData="{i18n>terminTableHeader}"
             >
                 <t:toolbar>
                     <Toolbar>
@@ -38,6 +39,7 @@
                             text="{i18n>btnAddNewCall}"
                             press=".onAddNewCall"
                             class="blueButton"
+                            enabled="{pm>/buttons/btnAddNewCallEnabled}"
                         />
 
                         <Button

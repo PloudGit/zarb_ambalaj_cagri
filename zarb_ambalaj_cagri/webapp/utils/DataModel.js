@@ -18,10 +18,10 @@ sap.ui.define([
 
 
 			var dData = {
-				ReviseNote:"",
-				CancelNote:"",
+				ReviseNote: "",
+				CancelNote: "",
 				selectedRow: {},
-				selectedRowCallList:{},
+				selectedRowCallList: {},
 				OrderList: []
 			}
 
@@ -39,10 +39,12 @@ sap.ui.define([
 			var pModel = new JSONModel();
 
 			var pData = {
-
+				buttons: {
+					btnAddNewCallEnabled: true
+				},
 				popup: {
-					title: "",     
-					action: "",     
+					title: "",
+					action: "",
 					fields: {
 						TermItemNum: { visible: true, editable: false },
 						Quantity: { visible: true, editable: true },

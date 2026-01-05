@@ -81,6 +81,7 @@ sap.ui.define([
 
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
+            var callMengeInput = sap.ui.getCore().byId("callMenge").getValue();
 
             var callValues = dData["selectedRowCallList"];
             var cancelNote = dData["CancelNote"];
@@ -101,7 +102,10 @@ sap.ui.define([
                     };
 
                     var missingLabels = [];
-
+                    if (callMengeInput === "0") {
+                        missingLabels.push(oBundle.getText(requiredFields["Menge"]));
+                    }
+                    debugger;
                     Object.keys(requiredFields).forEach(function (field) {
                         if (!callValues[field] || callValues[field].toString().trim() === "") {
                             missingLabels.push(oBundle.getText(requiredFields[field]));
@@ -314,6 +318,30 @@ sap.ui.define([
                     }
                 });
             } else {
+                debugger;
+                if (data.ToCgrItems.results && data.ToCgrItems.results.length > 0) {
+                    var newRestMenge = data.ToCgrItems.results[0].RestMenge;
+
+                    var dModel = that.getOModel(that, "dm");
+                    var oSelectedRow = dModel.getProperty("/selectedRow");
+
+                    if (oSelectedRow) {
+                        var aOrderList = dModel.getProperty("/OrderList") || [];
+
+                        for (var i = 0; i < aOrderList.length; i++) {
+                            var oItem = aOrderList[i];
+
+                            if (oItem.Ebeln === oSelectedRow.Ebeln && oItem.Ebelp === oSelectedRow.Ebelp) {
+                                oItem.RestMenge = newRestMenge;
+
+                                dModel.setProperty("/OrderList", aOrderList);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+
                 // Diğer tüm aksiyonlar - Popup kapat, CallList'i yenile
                 if (that.CallPopup) {
                     that.CallPopup.close();

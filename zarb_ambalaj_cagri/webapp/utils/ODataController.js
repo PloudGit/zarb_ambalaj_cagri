@@ -77,7 +77,7 @@ sap.ui.define([
 			debugger;
 
 			var oDataModel = that.getOwnerComponent().getModel();
-			var selectedRowCallList = dData["selectedRow"];
+			const selectedRowCallList = dData["selectedRow"];
 
 			var aFilters = [];
 
@@ -139,7 +139,8 @@ sap.ui.define([
 					Logsy: row.Logsy,
 					ApKey: row.ApKey,
 					Menge: callMengeValue,
-					Slfdt: row.Slfdt,
+					// Slfdt: row.Slfdt,
+					Slfdt: that.formatters.adjustStartDateForUTC(row.Slfdt),
 					Normt: row.Normt,
 					Lifnr: row.Lifnr
 				};
@@ -202,8 +203,10 @@ sap.ui.define([
 					Etenr: order.Etenr,
 					Logsy: order.Logsy,
 					ApKey: order.ApKey,
-					Menge: order.Menge,
-					Slfdt: order.Slfdt,
+					// Menge: order.Menge,
+					Menge: order.RestMenge, // Kalan Miktar gitsin toplu kaydette 
+					// Slfdt: order.Slfdt,
+					Slfdt: that.formatters.adjustStartDateForUTC(order.Slfdt),
 					Normt: order.Normt,
 					Lifnr: order.Lifnr
 				}));

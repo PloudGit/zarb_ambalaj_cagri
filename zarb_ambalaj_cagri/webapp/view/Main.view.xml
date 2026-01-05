@@ -187,7 +187,10 @@
                                     <t:Column>
                                         <Label text="{i18n>printCode}" />
                                         <t:template>
-                                            <Input value="{dm>Normt}" />
+                                            <Input
+                                                value="{dm>Normt}"
+                                                editable="{= ${dm>RestMenge} !== '0.000' }"
+                                            />
                                         </t:template>
                                     </t:Column>
 
@@ -202,6 +205,7 @@
                                                     pattern: 'dd.MM.yyyy'
                                                 }
                                             }"
+                                                editable="{= ${dm>RestMenge} !== '0.000' }"
                                             />
                                         </t:template>
                                     </t:Column>

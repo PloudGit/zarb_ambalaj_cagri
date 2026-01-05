@@ -119,6 +119,7 @@
                 text="{i18n>btnAdd}"
                 icon="sap-icon://add"
                 visible="{= ${pm>/popup/action} === 'add'}"
+                enabled="{dm>/selectedRowCallList/BtnCreate}"
                 press=".onConfirmAdd"
                 class="blueButton"
             />
@@ -127,6 +128,7 @@
                 text="{i18n>btnRevise}"
                 icon="sap-icon://edit"
                 visible="{= ${pm>/popup/action} === 'change'}"
+                enabled="{dm>/selectedRowCallList/BtnChange}"
                 press=".onConfirmChange"
                 class="orangeButton"
             />
@@ -135,6 +137,7 @@
                 text="{i18n>btnCancel}"
                 icon="sap-icon://decline"
                 visible="{= ${pm>/popup/action} === 'cancel'}"
+                enabled="{dm>/selectedRowCallList/BtnCancel}"
                 press=".onConfirmCancel"
                 class="redButton"
             />

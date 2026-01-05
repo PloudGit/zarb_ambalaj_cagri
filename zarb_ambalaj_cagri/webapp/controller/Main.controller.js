@@ -180,23 +180,43 @@ sap.ui.define([
 
             that._setSelectedRow(that, oRowData, "callListTable");
 
-            // pm model state
+            // default
+            var editableSettings = {
+                TermItemNum: false,
+                Quantity: true,
+                Unit: false,
+                DeliveryDate: false,
+                FirmDelivery: true,
+                PrintCode: true,
+                ReviseNote: true,
+                CancelNote: false
+                // BtnRevise: true
+            };
+
+            if (oRowData.BtnChange === false) { // 
+                editableSettings.Quantity = false;
+                editableSettings.FirmDelivery = false;
+                editableSettings.PrintCode = false;
+                editableSettings.ReviseNote = false;
+                // editableSettings.BtnRevise = false;
+            }
+
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
                 title: that.getResourceBundle().getText("popupReviseCallTitle"),
                 action: "change",
                 fields: {
-                    TermItemNum: { visible: true, editable: false },
-                    Quantity: { visible: true, editable: true },
-                    Unit: { visible: true, editable: false },
-                    DeliveryDate: { visible: true, editable: false },
-                    FirmDelivery: { visible: true, editable: true },
-                    PrintCode: { visible: true, editable: true },
-                    ReviseNote: { visible: true, editable: true },
-                    CancelNote: { visible: false, editable: false }
+                    TermItemNum: { visible: true, editable: editableSettings.TermItemNum },
+                    Quantity: { visible: true, editable: editableSettings.Quantity },
+                    Unit: { visible: true, editable: editableSettings.Unit },
+                    DeliveryDate: { visible: true, editable: editableSettings.DeliveryDate },
+                    FirmDelivery: { visible: true, editable: editableSettings.FirmDelivery },
+                    PrintCode: { visible: true, editable: editableSettings.PrintCode },
+                    ReviseNote: { visible: true, editable: editableSettings.ReviseNote },
+                    CancelNote: { visible: false, editable: editableSettings.CancelNote }
+                    // BtnRevise: { enabled: editableSettings.BtnRevise }
                 }
             });
-
             var dModel = that.getOModel(that, "dm");
             dModel.setProperty("/ReviseNote", "");
 
@@ -207,51 +227,84 @@ sap.ui.define([
         onAddNewCall: function () {
             var that = this;
 
-
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
 
             var selectedRow = dData["selectedRow"];
+            var callList = dData["CallList"] || [];
+
+            // inputtaki değeri kaydedince cacheliyor o yüzden sıfırlayalım.
+            var callMengeInput = sap.ui.getCore().byId("callMenge");
+            if (callMengeInput) {
+                callMengeInput.setValue("0");
+            }
+            // dModel.setProperty("/selectedRowCallList/Menge", "0");
+
+            let maxEtenr = 0;
+            callList.forEach(item => {
+                const etenr = parseInt(item.Etenr, 10);
+                if (!isNaN(etenr) && etenr > maxEtenr) {
+                    maxEtenr = etenr;
+                }
+            });
+
+            const newEtenr = (maxEtenr + 1).toString();
 
             const item = {
                 Ebeln: selectedRow.Ebeln,
                 Eindt: selectedRow.Eindt,
                 Meins: selectedRow.Meins,
                 Ebelp: selectedRow.Ebelp,
-                Etenr: selectedRow.Etenr,
+                Etenr: newEtenr,
                 Logsy: selectedRow.Logsy,
                 ApKey: selectedRow.ApKey,
                 Menge: "0",
-                Slfdt: selectedRow.Slfdt,
-                Normt: selectedRow.Normt,
+                // Slfdt: selectedRow.Slfdt,
+                Slfdt: that.formatters.adjustStartDateForUTC(selectedRow.Slfdt),
+                Normt: selectedRow.Matnr + "-" + newEtenr, // A200000999-1 .. şeklinde olsu n
                 Lifnr: selectedRow.Lifnr,
                 Matnr: selectedRow.Matnr
             };
 
             dModel.setProperty("/selectedRowCallList", item);
+            dModel.refresh();
+
+            var editableSettings = {
+                TermItemNum: false,
+                Quantity: true,
+                Unit: false,
+                DeliveryDate: false,
+                FirmDelivery: true,
+                PrintCode: true,
+                ReviseNote: false,
+                CancelNote: false
+            };
+
 
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
                 title: this.getResourceBundle().getText("popupAddNewCallTitle"),
                 action: "add",
                 fields: {
-                    TermItemNum: { visible: true, editable: false },
-                    Quantity: { visible: true, editable: true },
-                    Unit: { visible: true, editable: false },
-                    DeliveryDate: { visible: true, editable: false },
-                    FirmDelivery: { visible: true, editable: true },
-                    PrintCode: { visible: true, editable: true },
-                    ReviseNote: { visible: false, editable: false },
-                    CancelNote: { visible: false, editable: false }
+                    TermItemNum: { visible: true, editable: editableSettings.TermItemNum },
+                    Quantity: { visible: true, editable: editableSettings.Quantity },
+                    Unit: { visible: true, editable: editableSettings.Unit },
+                    DeliveryDate: { visible: true, editable: editableSettings.DeliveryDate },
+                    FirmDelivery: { visible: true, editable: editableSettings.FirmDelivery },
+                    PrintCode: { visible: true, editable: editableSettings.PrintCode },
+                    ReviseNote: { visible: false, editable: editableSettings.ReviseNote },
+                    CancelNote: { visible: false, editable: editableSettings.CancelNote }
                 }
             });
 
+            // Popup'ı aç
             that._callPopup().open();
-
         },
 
         onCancelCall: function () {
             var that = this;
+
+            // satır seçimi kontrolü
             var index = that._validateSelection(that, "callListTable");
             if (index === null) {
                 return;
@@ -264,28 +317,76 @@ sap.ui.define([
 
             that._setSelectedRow(that, oRowData, "callListTable");
 
+            var editableSettings = {
+                TermItemNum: false,
+                Quantity: false,
+                Unit: false,
+                DeliveryDate: false,
+                FirmDelivery: false,
+                PrintCode: false,
+                ReviseNote: false,
+                CancelNote: true
+            };
+
+            if (oRowData.BtnCancel === false) {
+                editableSettings.CancelNote = false;
+            }
+
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
-                title: this.getResourceBundle().getText("popupCancelCallTitle"),
+                title: that.getResourceBundle().getText("popupCancelCallTitle"),
                 action: "cancel",
                 fields: {
-                    TermItemNum: { visible: true, editable: false },
-                    Quantity: { visible: true, editable: false },
-                    Unit: { visible: true, editable: false },
-                    DeliveryDate: { visible: true, editable: false },
-                    FirmDelivery: { visible: true, editable: false },
-                    PrintCode: { visible: true, editable: false },
-                    ReviseNote: { visible: false, editable: false },
-                    CancelNote: { visible: true, editable: true }
+                    TermItemNum: { visible: true, editable: editableSettings.TermItemNum },
+                    Quantity: { visible: true, editable: editableSettings.Quantity },
+                    Unit: { visible: true, editable: editableSettings.Unit },
+                    DeliveryDate: { visible: true, editable: editableSettings.DeliveryDate },
+                    FirmDelivery: { visible: true, editable: editableSettings.FirmDelivery },
+                    PrintCode: { visible: true, editable: editableSettings.PrintCode },
+                    ReviseNote: { visible: false, editable: editableSettings.ReviseNote },
+                    CancelNote: { visible: true, editable: editableSettings.CancelNote }
                 }
             });
 
+            // CancelNote alanını temizle
             var dModel = that.getOModel(that, "dm");
             dModel.setProperty("/CancelNote", "");
 
+            // Popup'ı aç
             that._callPopup().open();
-
         },
+
+        // onSelectionChange: function (oEvent) {
+        //     debugger;
+        //     var that = this;
+        //     var oTable = oEvent.getSource();
+        //     var selectedIndex = oTable.getSelectedIndex();
+
+        //     if (selectedIndex < 0) {
+        //         return;
+        //     }
+
+        //     var oContext = oTable.getContextByIndex(selectedIndex);
+        //     if (!oContext) {
+        //         return;
+        //     }
+
+        //     var oRowData = oContext.getObject();
+
+        //     // Seçilen satır verisini set et (örneğin onChange içinde kullanılacaksa)
+        //     that._setSelectedRow(that, oRowData, "callListTable");
+
+        //     that.setButtonStates(that, oRowData.BtnCreate);
+        // },
+
+        // setButtonStates: function (that, btnNewCall) {
+
+        //     var pModel = that.getOModel(that, "pm");
+
+        //     pModel.setProperty("/buttons", {
+        //         btnAddNewCallEnabled: btnNewCall
+        //     });
+        // },
 
         getResourceBundle: function () {
             return this.getView().getModel("i18n").getResourceBundle();
@@ -376,7 +477,10 @@ sap.ui.define([
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
             const row = dModel.getProperty("/selectedRowCallList");
-            var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"]
+            var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
+            // callMenge = parseFloat(callMenge);
+            // callMenge = callMenge.toString();
+            callMenge = callMenge.replace(".", "").replace(",", ".");
 
             const item = {
                 Ebeln: row.Ebeln,
@@ -387,7 +491,8 @@ sap.ui.define([
                 Logsy: row.Logsy,
                 ApKey: row.ApKey,
                 Menge: callMenge,
-                Slfdt: row.Slfdt,
+                // Slfdt: row.Slfdt,
+                Slfdt: that.formatters.adjustStartDateForUTC(row.Slfdt),
                 Normt: row.Normt,
                 Lifnr: row.Lifnr
             };
