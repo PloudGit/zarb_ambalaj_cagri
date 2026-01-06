@@ -476,37 +476,37 @@ sap.ui.define([
 
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
-            const row = dModel.getProperty("/selectedRowCallList");
-            var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
-            // callMenge = parseFloat(callMenge);
-            // callMenge = callMenge.toString();
-            callMenge = callMenge.replace(".", "").replace(",", ".");
 
-            const item = {
-                Ebeln: row.Ebeln,
-                Eindt: row.Eindt,
-                Meins: row.Meins,
-                Ebelp: row.Ebelp,
-                Etenr: row.Etenr,
-                Logsy: row.Logsy,
-                ApKey: row.ApKey,
-                Menge: callMenge,
-                // Slfdt: row.Slfdt,
-                Slfdt: that.formatters.adjustStartDateForUTC(row.Slfdt),
-                Normt: row.Normt,
-                Lifnr: row.Lifnr
-            };
+            if (action !== 'B') {
+                const row = dModel.getProperty("/selectedRowCallList");
+                var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
+                callMenge = callMenge.replace(".", "").replace(",", ".");
 
-            var data = {
-                "Ebeln": row.Ebeln,
-                "Ebelp": row.Ebelp,
-                "Logsy": row.Logsy,
-                "ApKey": row.ApKey,
-                "ReviseNote": dData["ReviseNote"],
-                "CancelNote": dData["CancelNote"],
-                "ToCgrItems": [item]
-            };
+                const item = {
+                    Ebeln: row.Ebeln,
+                    Eindt: row.Eindt,
+                    Meins: row.Meins,
+                    Ebelp: row.Ebelp,
+                    Etenr: row.Etenr,
+                    Logsy: row.Logsy,
+                    ApKey: row.ApKey,
+                    Menge: callMenge,
+                    // Slfdt: row.Slfdt,
+                    Slfdt: that.formatters.adjustStartDateForUTC(row.Slfdt),
+                    Normt: row.Normt,
+                    Lifnr: row.Lifnr
+                };
 
+                var data = {
+                    "Ebeln": row.Ebeln,
+                    "Ebelp": row.Ebelp,
+                    "Logsy": row.Logsy,
+                    "ApKey": row.ApKey,
+                    "ReviseNote": dData["ReviseNote"],
+                    "CancelNote": dData["CancelNote"],
+                    "ToCgrItems": [item]
+                };
+            }
             if (response == 'OK') {
                 debugger;
                 switch (action) {

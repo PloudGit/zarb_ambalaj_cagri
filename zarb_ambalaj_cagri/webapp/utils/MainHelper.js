@@ -81,7 +81,13 @@ sap.ui.define([
 
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
-            var callMengeInput = sap.ui.getCore().byId("callMenge").getValue();
+            var callMengeInput = null;
+            if (action !== 'B') {
+                var callMengeField = sap.ui.getCore().byId("callMenge");
+                if (callMengeField) {
+                    callMengeInput = callMengeField.getValue();
+                }
+            }
 
             var callValues = dData["selectedRowCallList"];
             var cancelNote = dData["CancelNote"];
