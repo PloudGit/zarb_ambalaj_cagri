@@ -76,7 +76,22 @@ sap.ui.define([
             });
         },
 
+        setFileUploaderConfig: function (that, id) {
 
+            var oUploader = that.getView().byId("excelUploader");
+            oUploader.addEventDelegate({
+                onAfterRendering: function () {
+                    // Uploader içindeki gerçek DOM'dan butonu bul
+                    var sUploaderId = oUploader.getId();
+                    var $button = $("#" + sUploaderId).find("button");
+
+                    if ($button && $button.length > 0) {
+                        $button.addClass("blueButton");
+                    }
+                }
+            }, oUploader);
+
+        },
         checkData: function (that, action) {
 
             var dModel = that.getOModel(that, "dm");
@@ -134,6 +149,18 @@ sap.ui.define([
                     //printCode içinde malzeme kodu geçiyor mu?
                     var materialCode = callValues.Matnr || "";
                     var printCode = callValues.Normt || "";
+
+                    if (printCode.length > 18) {
+                        MessageBox.error(
+                            oBundle.getText("printcode_maxlength_exceeded"),
+                            {
+                                title: oBundle.getText("missing_fields_title"),
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK
+                            }
+                        );
+                        return;
+                    }
 
                     if (!printCode.includes(materialCode)) {
                         MessageBox.error(
@@ -220,11 +247,17 @@ sap.ui.define([
                     orderList.forEach(function (row, index) {
                         var rowMissing = [];
 
-                        if (!row.Normt || row.Normt.toString().trim() === "") {
-                            rowMissing.push(oBundle.getText("printCode")); // i18n key
+                        if ((row.RestMenge !== "0.000") && (!row.Normt || row.Normt.toString().trim() === "")) {
+                            rowMissing.push(oBundle.getText("printCode"));
                         }
+
                         if (!row.Slfdt || row.Slfdt.toString().trim() === "") {
                             rowMissing.push(oBundle.getText("firmDeliveryDate"));
+                        }
+
+                        // printkod uzunluk kontrolü
+                        if (row.Normt && row.Normt.length > 18) {
+                            rowMissing.push(oBundle.getText("printcode_maxlength_exceeded"));
                         }
 
                         // printkod kontrolü 
@@ -233,7 +266,6 @@ sap.ui.define([
                         }
 
                         if (rowMissing.length > 0) {
-                            // Satır bilgisini da ekle (ör. sıra numarası + kolon adları)
                             missingMessages.push(
                                 oBundle.getText("row_label", [index + 1]) + ": " + rowMissing.join(", ")
                             );

@@ -58,6 +58,8 @@ sap.ui.define([
             var that = this;
 
             this._main.setFilterBar(this, "smartFilterBar");
+
+            this._main.setFileUploaderConfig(this, "excelUploader");
         },
 
         _onRouteMatched: function () {
@@ -82,6 +84,8 @@ sap.ui.define([
                 // Ekran yukarı scroll 
                 oScroll.scrollTo(0, 0, 0); // (x, y, duration)
             }
+
+
         },
 
         onExit: function () {
@@ -477,7 +481,7 @@ sap.ui.define([
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
 
-            if (action !== 'B') {
+            if (action !== 'B' && action !== 'EXCEL_UPLOAD') {
                 const row = dModel.getProperty("/selectedRowCallList");
                 var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
                 callMenge = callMenge.replace(".", "").replace(",", ".");
@@ -542,6 +546,11 @@ sap.ui.define([
 
 
                         break;
+
+                    case "EXCEL_UPLOAD":
+                        that._processExcelFile(that);
+                        break;
+
                     default:
                         break;
                 }
@@ -674,8 +683,178 @@ sap.ui.define([
             ];
 
             return aCols;
+        },
+        // EXCEL İŞLEMLERİ    
+
+        // EXCEL UPLOAD İŞLEMLERİ 
+        onUploadExcel: function () {
+            const that = this;
+            debugger;
+            const oUploader = that.getView().byId("excelUploader");
+
+            // const aFiles = oUploader.getFocusDomRef()?.files;
+            const aFiles = oUploader.getDomRef("fu")?.files;
+
+            if (!aFiles || aFiles.length === 0) {
+                that.showMessage("error", "errorNoExcelFile");
+                return;
+            }
+
+            that.confirmMessageWithActonResponse(
+                that,
+                "confirmUploadExcel",
+                that.onConfirmResponse,
+                "EXCEL_UPLOAD"
+            );
+        },
+        _processExcelFile: function (that) {
+            debugger
+            const oUploader = that.getView().byId("excelUploader");
+            const file = oUploader.getDomRef("fu")?.files?.[0];
+
+            if (!file) {
+                that.showMessage("error", "errorNoExcelFile");
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                try {
+                    const data = e.target.result;
+                    const workbook = XLSX.read(data, { type: "binary" });
+
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                        defval: "",
+                        header: 0
+                    });
+
+                    if (jsonData.length === 0) {
+                        that.showMessage("error", "errorExcelEmpty");
+                        return;
+                    }
+
+                    that._mapExcelDataToTable(that, jsonData);
+
+                } catch (err) {
+                    console.error("Excel okuma hatası:", err);
+                    that.showMessage("error", "errorReadingExcel");
+                    oUploader.setValue("");
+
+                }
+            };
+
+            reader.readAsBinaryString(file);
+        },
+
+        _mapExcelDataToTable: function (that, excelData) {
+            debugger;
+            const dModel = that.getView().getModel("dm");
+            const oBundle = that.getView().getModel("i18n").getResourceBundle();
+            const tableData = dModel.getProperty("/OrderList");
+
+            const sasHeader = oBundle.getText("sasNumber");
+            const kalemHeader = oBundle.getText("itemNumber");
+            const printHeader = oBundle.getText("printCode");
+
+            excelData.forEach((excelRow) => {
+                const sasNo = excelRow[sasHeader]?.toString().padStart(10, "0");
+                const kalemNo = excelRow[kalemHeader]?.toString().padStart(5, "0");
+
+                const matchedRow = tableData.find(
+                    (row) => row.Ebeln === sasNo && row.Ebelp === kalemNo && row.RestMenge !== "0.000"
+                );
+
+                if (matchedRow) {
+                    matchedRow.Normt = excelRow[printHeader];
+                }
+            });
+
+            dModel.refresh();
+
+            that.showMessage("success", "excelAppliedToTable");
+            that.getView().byId("excelUploader").setValue("");
+        },
+
+        onFileChange: function (oEvent) {
+            debugger;
+            const oUploader = oEvent.getSource();
+            const file = oUploader.getDomRef("fu")?.files?.[0];
+            const that = this;
+
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                try {
+                    const data = e.target.result;
+                    const workbook = XLSX.read(data, { type: "binary" });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                        defval: "",
+                        header: 0
+                    });
+
+                    if (!that._validateExcelData(jsonData)) {
+                        // that.showMessage("error", "errorInvalidExcelFormat");
+                        that.getView().byId("excelUploader").setValue("");
+                    }
+                } catch (err) {
+                    console.error("Dosya kontrol hatası:", err);
+                    that.showMessage("error", "errorReadingExcel");
+                    that.getView().byId("excelUploader").setValue("");
+                }
+            };
+
+            reader.readAsBinaryString(file);
+        },
+        _validateExcelData: function (data) {
+            const that = this;
+            const oBundle = that.getView().getModel("i18n").getResourceBundle();
+
+            if (!data || data.length === 0) {
+                that.showMessage("error", "errorExcelEmpty");
+                return false;
+            }
+
+            const requiredFields = [
+                oBundle.getText("sasNumber"),
+                oBundle.getText("itemNumber"),
+                oBundle.getText("printCode")
+            ];
+
+            const missingColumns = requiredFields.filter(f => !Object.keys(data[0]).includes(f));
+
+            if (missingColumns.length > 0) {
+                const sText = oBundle.getText("errorExcelMissingColumns", [missingColumns.join(", ")]);
+                that.showMessage("error", sText);
+                return false;
+            }
+
+            const invalidRows = data.filter(row =>
+                !row[oBundle.getText("sasNumber")] ||
+                !row[oBundle.getText("itemNumber")]
+            );
+
+            if (invalidRows.length > 0) {
+                that.showMessage("error", oBundle.getText("errorExcelMissingValues"));
+                return false;
+            }
+
+
+
+            return true;
         }
-        // EXCEL İŞLEMLERİ        
+
+
+
+
 
     });
 });

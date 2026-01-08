@@ -21,6 +21,23 @@ sap.ui.define([
 
             // enable routing
             this.getRouter().initialize();
+
+            this._loadXLSXLibrary();
+        },
+        _loadXLSXLibrary: function () {
+            const sUrl = "https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js";
+
+            jQuery.ajax({
+                url: sUrl,
+                dataType: "script",
+                success: function () {
+                    console.log("XLSX kütüphanesi yüklendi.");
+                },
+                error: function () {
+                    console.error("XLSX kütüphanesi yüklenemedi.");
+                }
+            });
         }
+
     });
 });

@@ -6,6 +6,7 @@
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified"
     xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
     xmlns:t="sap.ui.table"
 >
@@ -94,6 +95,25 @@
                                         />
 
                                         <ToolbarSpacer />
+                                        <Button
+                                            icon="sap-icon://upload"
+                                            text="Excel Yükle"
+                                            press=".onUploadExcel"
+                                            class="blueButton"
+                                        />
+                                        <u:FileUploader
+                                            id="excelUploader"
+                                            name="excelUploader"
+                                            change=".onFileChange"
+                                            fileType="xlsx"
+                                            useMultipart="false"
+                                            buttonText="{i18n>choose}"
+                                            sendXHR="true"
+                                            placeholder="{i18n>uploadExcelPlaceHolder}"
+                                            tooltip="{i18n>uploadExcelTooltip}"
+                                     
+                                        />
+
                                         <Button
                                             icon="sap-icon://save"
                                             text="{i18n>btnSave}"
