@@ -151,24 +151,23 @@ sap.ui.define([
                     var today = new Date();
                     today.setHours(0, 0, 0, 0); // sadece tarih karşılaştır
 
-                    //TODO: Aşağıdaki kod parçası test için yoruma alındı. Geri açılacak.
-                    // if (callValues.Slfdt) {
-                    //     var slfdt = new Date(callValues.Slfdt);
-                    //     slfdt.setHours(0, 0, 0, 0);
+                    // TODO: Aşağıdaki kod parçası test için yoruma alındı. Geri açılacak.
+                    if (callValues.Slfdt) {
+                        var slfdt = new Date(callValues.Slfdt);
+                        slfdt.setHours(0, 0, 0, 0);
 
-                    //     if (slfdt < today) {
-                    //         MessageBox.error(
-                    //             oBundle.getText("row_label", [1]) + ": " + oBundle.getText("slfdat_not_before_today"),
-                    //             {
-                    //                 title: oBundle.getText("missing_fields_title"),
-                    //                 actions: [MessageBox.Action.OK],
-                    //                 emphasizedAction: MessageBox.Action.OK
-                    //             }
-                    //         );
-                    //         return;
-                    //     }
-                    // }
-
+                        if (slfdt < today) {
+                            MessageBox.error(
+                                oBundle.getText("row_label", [1]) + ": " + oBundle.getText("slfdat_not_before_today"),
+                                {
+                                    title: oBundle.getText("missing_fields_title"),
+                                    actions: [MessageBox.Action.OK],
+                                    emphasizedAction: MessageBox.Action.OK
+                                }
+                            );
+                            return;
+                        }
+                    }
 
                     // Kota kontrolü → dönen değere göre davran
                     that._oData.checkQuota(that).then(function (quotaOk) {
