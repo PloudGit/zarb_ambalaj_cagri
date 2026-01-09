@@ -652,25 +652,25 @@ sap.ui.define([
                 },
                 {
                     label: i18n.getText("remainingQty"),
-                    property: "Sevkm",
+                    property: "RestMenge",
                     type: "number",
                     width: 12
                 },
                 {
                     label: i18n.getText("printCode"),
-                    property: "Zdrukodu",
+                    property: "Normt",
                     type: "string",
                     width: 15
                 },
                 {
                     label: i18n.getText("firmDeliveryDate"),
-                    property: "Eindt",
+                    property: "Slfdt",
                     type: "date",
                     width: 15
                 },
                 {
                     label: i18n.getText("status"),
-                    property: "Status",
+                    property: "Statu",
                     type: "string",
                     width: 15
                 },
