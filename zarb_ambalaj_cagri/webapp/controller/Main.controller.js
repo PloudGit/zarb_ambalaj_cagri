@@ -574,7 +574,9 @@ sap.ui.define([
             var aFormattedData = oBinding.map(function (item) {
                 return Object.assign({}, item, {
                     Menge: that.formatters.formatDecimal(item.Menge),
-                    Sevkm: that.formatters.formatDecimal(item.Sevkm)
+                    RestMenge: that.formatters.formatDecimal(item.RestMenge),
+                    Sevkm: that.formatters.formatDecimal(item.Sevkm),
+                    Slfdt: that.formatters.adjustStartDateForUTC(item.Slfdt)
                 });
             });
 
