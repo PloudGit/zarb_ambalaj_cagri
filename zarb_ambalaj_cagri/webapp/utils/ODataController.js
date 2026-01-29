@@ -201,6 +201,7 @@ sap.ui.define([
 					Meins: order.Meins,
 					Ebelp: order.Ebelp,
 					Etenr: order.Etenr,
+					EtenrAkt:order.EtenrAkt,
 					Logsy: order.Logsy,
 					ApKey: order.ApKey,
 					// Menge: order.Menge,

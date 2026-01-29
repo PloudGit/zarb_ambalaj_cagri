@@ -492,6 +492,7 @@ sap.ui.define([
                     Meins: row.Meins,
                     Ebelp: row.Ebelp,
                     Etenr: row.Etenr,
+                    EtenrAkt:row.EtenrAkt, // EKLENDİ 
                     Logsy: row.Logsy,
                     ApKey: row.ApKey,
                     Menge: callMenge,
