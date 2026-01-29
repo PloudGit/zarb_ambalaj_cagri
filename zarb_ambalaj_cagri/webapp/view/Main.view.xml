@@ -83,6 +83,7 @@
                                 enableColumnReordering="true"
                                 enableCellFilter="true"
                                 width="100%"
+                                rowMode="Interactive"
                             >
                                 <t:toolbar>
                                     <Toolbar>
