@@ -370,6 +370,9 @@ sap.ui.define([
 
                             if (oItem.Ebeln === oSelectedRow.Ebeln && oItem.Ebelp === oSelectedRow.Ebelp) {
                                 oItem.RestMenge = newRestMenge;
+                                if (!oItem.Normt || oItem.Normt === "") { // normt yoksa oluşan değeri buraya yazalım 
+                                    oItem.Normt = data.ToCgrItems.results[0].Normt;
+                                }
 
                                 dModel.setProperty("/OrderList", aOrderList);
                                 break;

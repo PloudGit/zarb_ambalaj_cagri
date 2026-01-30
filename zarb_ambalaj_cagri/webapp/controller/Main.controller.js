@@ -260,12 +260,14 @@ sap.ui.define([
                 Meins: selectedRow.Meins,
                 Ebelp: selectedRow.Ebelp,
                 Etenr: newEtenr,
+                EtenrAkt:selectedRow.Etenr, // orderlist içinde Etenr
                 Logsy: selectedRow.Logsy,
                 ApKey: selectedRow.ApKey,
                 Menge: "0",
                 // Slfdt: selectedRow.Slfdt,
                 Slfdt: that.formatters.adjustStartDateForUTC(selectedRow.Slfdt),
-                Normt: selectedRow.Matnr + "-" + newEtenr, // A200000999-1 .. şeklinde olsu n
+                // Normt: selectedRow.Matnr + "-" + newEtenr, // A200000999-1 .. şeklinde olsu n
+                Normt: selectedRow.Normt || "",
                 Lifnr: selectedRow.Lifnr,
                 Matnr: selectedRow.Matnr
             };
