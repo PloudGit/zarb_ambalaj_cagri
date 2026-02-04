@@ -290,7 +290,7 @@ sap.ui.define([
                     var pastDateMessages = [];
 
                     orderList.forEach((element, index) => {
-                        if (element.Slfdt) {
+                        if (element.RestMenge !== "0.000" && element.Slfdt) {
                             var slfdt = new Date(element.Slfdt);
                             slfdt.setHours(0, 0, 0, 0);
 
