@@ -105,22 +105,26 @@ sap.ui.define([
             }
 
             var callValues = dData["selectedRowCallList"];
+            var selectedRow = dData["selectedRow"];
             var cancelNote = dData["CancelNote"];
             var reviseNote = dData["ReviseNote"];
             var orderList = dData["OrderList"]
-
+            debugger;
             var oBundle = that.getResourceBundle();
 
             switch (action) {
                 case 'C':
+                    var printkodMandatory = !!selectedRow.PrintkodMandatory; // !! işareti JavaScript’te “değeri kesin boolean’a çevir” demek. Yani callValues.PrintkodMandatory ne gelirse gelsin ("X", 1, "true", null, undefined vs.) sonucu true/false yapar.
 
                     var requiredFields = {
                         Menge: "quantity",
-                        // Meins: "unit",
-                        // Eindt: "deliveryDate",
-                        Slfdt: "firmDeliveryDate",
-                        Normt: "printCode"
+                        Slfdt: "firmDeliveryDate"
                     };
+
+                    // printkod zorunluysa listeye ekle
+                    if (printkodMandatory) {
+                        requiredFields.Normt = "printCode";
+                    }
 
                     var missingLabels = [];
                     if (callMengeInput === "0") {
@@ -145,35 +149,35 @@ sap.ui.define([
                         return;
                     }
                     debugger;
+                    if (printkodMandatory) {  // printkod zorunlu ise 
+                        //printCode içinde malzeme kodu geçiyor mu
+                        var materialCode = callValues.Matnr || "";
+                        var printCode = callValues.Normt || "";
 
-                    //printCode içinde malzeme kodu geçiyor mu?
-                    var materialCode = callValues.Matnr || "";
-                    var printCode = callValues.Normt || "";
+                        if (printCode.length > 18) {
+                            MessageBox.error(
+                                oBundle.getText("printcode_maxlength_exceeded"),
+                                {
+                                    title: oBundle.getText("missing_fields_title"),
+                                    actions: [MessageBox.Action.OK],
+                                    emphasizedAction: MessageBox.Action.OK
+                                }
+                            );
+                            return;
+                        }
 
-                    if (printCode.length > 18) {
-                        MessageBox.error(
-                            oBundle.getText("printcode_maxlength_exceeded"),
-                            {
-                                title: oBundle.getText("missing_fields_title"),
-                                actions: [MessageBox.Action.OK],
-                                emphasizedAction: MessageBox.Action.OK
-                            }
-                        );
-                        return;
+                        if (!printCode.includes(materialCode)) {
+                            MessageBox.error(
+                                oBundle.getText("printcode_material_mismatch"), // <-- i18n key
+                                {
+                                    title: oBundle.getText("missing_fields_title"),
+                                    actions: [MessageBox.Action.OK],
+                                    emphasizedAction: MessageBox.Action.OK
+                                }
+                            );
+                            return;
+                        }
                     }
-
-                    if (!printCode.includes(materialCode)) {
-                        MessageBox.error(
-                            oBundle.getText("printcode_material_mismatch"), // <-- i18n key
-                            {
-                                title: oBundle.getText("missing_fields_title"),
-                                actions: [MessageBox.Action.OK],
-                                emphasizedAction: MessageBox.Action.OK
-                            }
-                        );
-                        return;
-                    }
-
                     // geçmiş tarih kontrolü
                     var today = new Date();
                     today.setHours(0, 0, 0, 0); // sadece tarih karşılaştır
@@ -247,7 +251,9 @@ sap.ui.define([
                     orderList.forEach(function (row, index) {
                         var rowMissing = [];
 
-                        if ((row.RestMenge !== "0.000") && (!row.Normt || row.Normt.toString().trim() === "")) {
+                        var printkodMandatory = row.PrintkodMandatory === true;
+
+                        if (printkodMandatory && row.RestMenge !== "0.000" && (!row.Normt || row.Normt.toString().trim() === "")) {
                             rowMissing.push(oBundle.getText("printCode"));
                         }
 
@@ -255,14 +261,15 @@ sap.ui.define([
                             rowMissing.push(oBundle.getText("firmDeliveryDate"));
                         }
 
-                        // printkod uzunluk kontrolü
-                        if (row.Normt && row.Normt.length > 18) {
-                            rowMissing.push(oBundle.getText("printcode_maxlength_exceeded"));
-                        }
-
-                        // printkod kontrolü 
-                        if (row.Normt && row.Matnr && !row.Normt.includes(row.Matnr)) {
-                            rowMissing.push(oBundle.getText("printcode_material_mismatch"));
+                        if (printkodMandatory) {
+                            // printkod uzunluk kontrolü
+                            if (row.Normt && row.Normt.length > 18) {
+                                rowMissing.push(oBundle.getText("printcode_maxlength_exceeded"));
+                            }
+                            // printkod kontrolü 
+                            if (row.Normt && row.Matnr && !row.Normt.includes(row.Matnr)) {
+                                rowMissing.push(oBundle.getText("printcode_material_mismatch"));
+                            }
                         }
 
                         if (rowMissing.length > 0) {

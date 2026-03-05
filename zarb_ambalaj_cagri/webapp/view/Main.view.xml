@@ -112,7 +112,6 @@
                                             sendXHR="true"
                                             placeholder="{i18n>uploadExcelPlaceHolder}"
                                             tooltip="{i18n>uploadExcelTooltip}"
-                                     
                                         />
 
                                         <Button
@@ -205,12 +204,13 @@
                                     </t:Column>
 
                                     <!-- <editable> -->
+                                    <!-- editable="{= ${dm>RestMenge} !== '0.000' }" -->
                                     <t:Column>
                                         <Label text="{i18n>printCode}" />
                                         <t:template>
                                             <Input
                                                 value="{dm>Normt}"
-                                                editable="{= ${dm>RestMenge} !== '0.000' }"
+                                                editable="{= ${dm>PrintkodMandatory} === true &amp;&amp; ${dm>RestMenge} !== '0.000' }"
                                             />
                                         </t:template>
                                     </t:Column>

@@ -183,6 +183,9 @@ sap.ui.define([
             }
 
             that._setSelectedRow(that, oRowData, "callListTable");
+            var dModel = that.getOModel(that, "dm");
+            var selectedRow = dModel.getProperty("/selectedRow") || {};
+            var printkodMandatory = selectedRow.PrintkodMandatory === true;
 
             // default
             var editableSettings = {
@@ -196,6 +199,9 @@ sap.ui.define([
                 CancelNote: false
                 // BtnRevise: true
             };
+
+            // zorunlu değilse edite kapalı olsun 
+            editableSettings.PrintCode = printkodMandatory;
 
             if (oRowData.BtnChange === false) { // 
                 editableSettings.Quantity = false;
@@ -254,20 +260,22 @@ sap.ui.define([
 
             const newEtenr = (maxEtenr + 1).toString();
 
+            var printkodMandatory = selectedRow.PrintkodMandatory === true;
+
             const item = {
                 Ebeln: selectedRow.Ebeln,
                 Eindt: selectedRow.Eindt,
                 Meins: selectedRow.Meins,
                 Ebelp: selectedRow.Ebelp,
                 Etenr: newEtenr,
-                EtenrAkt:selectedRow.Etenr, // orderlist içinde Etenr
+                EtenrAkt: selectedRow.Etenr, // orderlist içinde Etenr
                 Logsy: selectedRow.Logsy,
                 ApKey: selectedRow.ApKey,
                 Menge: "0",
                 // Slfdt: selectedRow.Slfdt,
                 Slfdt: that.formatters.adjustStartDateForUTC(selectedRow.Slfdt),
                 // Normt: selectedRow.Matnr + "-" + newEtenr, // A200000999-1 .. şeklinde olsu n
-                Normt: selectedRow.Normt || "",
+                Normt: (printkodMandatory ? (selectedRow.Normt || "") : ""),
                 Lifnr: selectedRow.Lifnr,
                 Matnr: selectedRow.Matnr
             };
@@ -286,6 +294,8 @@ sap.ui.define([
                 CancelNote: false
             };
 
+            // zorunlu değilse edite kapalı olsun 
+            editableSettings.PrintCode = printkodMandatory;
 
             var pModel = that.getOModel(that, "pm");
             pModel.setProperty("/popup", {
@@ -494,7 +504,7 @@ sap.ui.define([
                     Meins: row.Meins,
                     Ebelp: row.Ebelp,
                     Etenr: row.Etenr,
-                    EtenrAkt:row.EtenrAkt, // EKLENDİ 
+                    EtenrAkt: row.EtenrAkt, // EKLENDİ 
                     Logsy: row.Logsy,
                     ApKey: row.ApKey,
                     Menge: callMenge,
