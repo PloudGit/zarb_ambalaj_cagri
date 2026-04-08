@@ -53,23 +53,22 @@ sap.ui.define([
                         oFB._oHideShowButton.addStyleClass("yellowButton");
                     }
 
-                    // // Clear butonu
-                    // if (oFB._oClearButtonOnFB) {
-                    //     oFB._oClearButtonOnFB.setType(sap.m.ButtonType.Transparent);
-                    //     oFB._oClearButtonOnFB.addStyleClass("redButton");
+                    // custom buton
+                    // var oToolbar = oFB.getToolbar ? oFB.getToolbar() : oFB._oToolbar;
+                    // if (oToolbar && !oFB._bCustomButtonAdded) {
+                    //     oFB._bCustomButtonAdded = true;
+
+                    //     oToolbar.addContent(
+                    //         new sap.m.Button({
+                    //             text: "Ambalaj Portaline Git",
+                    //             icon: "sap-icon://customer-view",
+                    //             press: that._main.onOpenAmbalajPortali.bind(that)
+                    //         }).addStyleClass("redButton sapUiSmallMarginLeft")
+                    //     );
+
                     // }
 
-                    // // Restore Filters butonu
-                    // if (oFB._oRestoreButtonOnFB) {
-                    //     oFB._oRestoreButtonOnFB.setType(sap.m.ButtonType.Transparent);
-                    //     oFB._oRestoreButtonOnFB.addStyleClass("redButton");
-                    // }
-
-                    // // Show All Filters butonu
-                    // if (oFB._oShowAllFiltersButton) {
-                    //     oFB._oShowAllFiltersButton.setType(sap.m.ButtonType.Transparent);
-                    //     oFB._oShowAllFiltersButton.addStyleClass("redButton");
-                    // }
+                
 
                     debugger;
                 }
@@ -189,7 +188,7 @@ sap.ui.define([
 
                         if (slfdt < today) {
                             MessageBox.error(
-                                oBundle.getText("row_label", [1]) + ": " + oBundle.getText("slfdat_not_before_today"),
+                                oBundle.getText("slfdat_not_before_today"),
                                 {
                                     title: oBundle.getText("missing_fields_title"),
                                     actions: [MessageBox.Action.OK],
@@ -401,7 +400,39 @@ sap.ui.define([
                     }
                 });
             }
-        }
+        },
+
+        onOpenAmbalajPortali: function (that) {
+            debugger;
+
+            var systemId;
+            if (sap.ushell) {
+                systemId = sap.ushell.Container.getLogonSystem("system").getName();
+            } else {
+                systemId = "DS4";
+            }
+
+            var url;
+            if (systemId === "DS4") {
+                // url = i18n.getText("urlCallDev");
+                url = "https://vhvctds4ci.sap.abdiibrahim.com.tr:44300/sap/bc/ui5_ui5/ui2/ushell/shells/abap/FioriLaunchpad.html?sap-client=100&sap-language=TR#ZARB_AMBALAJP-manage";
+            }
+            else if (systemId === "QS4") {
+                // url = i18n.getText("urlCallQa");
+                url = "https://vhvctqs4ci.sap.abdiibrahim.com.tr:44300/sap/bc/ui5_ui5/ui2/ushell/shells/abap/FioriLaunchpad.html?sap-client=100&sap-language=TR#ZARB_AMBALAJP-manage";
+
+            }
+            else if (systemId === "PS4") {
+                // url = i18n.getText("urlCallProd");
+                url = "https://vhvctps4ci.sap.abdiibrahim.com.tr:44300/sap/bc/ui5_ui5/ui2/ushell/shells/abap/FioriLaunchpad.html?sap-client=100&sap-language=TR#ZARB_AMBALAJP-manage";
+
+            }
+
+            sap.ui.require(["sap/m/library"], function (library) {
+                var URLHelper = library.URLHelper;
+                URLHelper.redirect(url, false);
+            });
+        },
 
 
 

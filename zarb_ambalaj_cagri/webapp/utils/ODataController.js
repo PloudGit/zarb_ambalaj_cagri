@@ -118,8 +118,13 @@ sap.ui.define([
 		},
 
 		checkQuota: function (that) {
-			var callMengeInput = sap.ui.getCore().byId("callMenge");
-	        var callMengeValue = callMengeInput["_lastValue"];
+			// var callMengeInput = sap.ui.getCore().byId("callMenge");
+			// var callMengeValue = callMengeInput["_lastValue"];
+
+			var callMengeValue = that._parseDecimalForBackend(
+				sap.ui.getCore().byId("callMenge").getValue()
+			);
+
 
 			return new Promise(function (resolve, reject) {
 
@@ -136,7 +141,7 @@ sap.ui.define([
 					Meins: row.Meins,
 					Ebelp: row.Ebelp,
 					Etenr: row.Etenr,
-					EtenrAkt:row.EtenrAkt,
+					EtenrAkt: row.EtenrAkt,
 					Logsy: row.Logsy,
 					ApKey: row.ApKey,
 					Menge: callMengeValue,
@@ -194,7 +199,7 @@ sap.ui.define([
 				var url = "/CgrHeaderSet";
 				const dModel = that.getOModel(that, "dm");
 				const orders = dModel.getData().OrderList || [];
-		
+
 				// OrderList içinden payload hazırlama
 				const items = orders.map(order => ({
 					Ebeln: order.Ebeln,
@@ -202,7 +207,7 @@ sap.ui.define([
 					Meins: order.Meins,
 					Ebelp: order.Ebelp,
 					Etenr: order.Etenr,
-					EtenrAkt:order.Etenr,
+					EtenrAkt: order.Etenr,
 					Logsy: order.Logsy,
 					ApKey: order.ApKey,
 					// Menge: order.Menge,
@@ -212,13 +217,13 @@ sap.ui.define([
 					Normt: order.Normt,
 					Lifnr: order.Lifnr
 				}));
-		
+
 				const data = {
 					Action: "Q",
 					Ebeln: orders[0].Ebeln,
 					Ebelp: orders[0].Ebelp,
 					Logsy: orders[0].Logsy,
-					ApKey: orders[0].ApKey,  
+					ApKey: orders[0].ApKey,
 					ToCgrItems: items
 				};
 
@@ -231,7 +236,7 @@ sap.ui.define([
 					success: function (oData, oResponse) {
 						debugger;
 						if (oData && oData.IsExceed !== true) {
-							resolve(true); 
+							resolve(true);
 							// veriyi create e göndermek için tekrar manipule etmeyelim direkt modelden alsın 
 							dModel.setProperty("/checkedTrueCallData", data);
 

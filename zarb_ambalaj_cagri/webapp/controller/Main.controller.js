@@ -244,10 +244,10 @@ sap.ui.define([
             var callList = dData["CallList"] || [];
 
             // inputtaki değeri kaydedince cacheliyor o yüzden sıfırlayalım.
-            var callMengeInput = sap.ui.getCore().byId("callMenge");
-            if (callMengeInput) {
-                callMengeInput.setValue("0");
-            }
+            // var callMengeInput = sap.ui.getCore().byId("callMenge");
+            // if (callMengeInput) {
+            //     callMengeInput.setValue("0");
+            // }
             // dModel.setProperty("/selectedRowCallList/Menge", "0");
 
             let maxEtenr = 0;
@@ -271,7 +271,8 @@ sap.ui.define([
                 EtenrAkt: selectedRow.Etenr, // orderlist içinde Etenr
                 Logsy: selectedRow.Logsy,
                 ApKey: selectedRow.ApKey,
-                Menge: "0",
+                // Menge: "0",
+                Menge: selectedRow.RestMenge,
                 // Slfdt: selectedRow.Slfdt,
                 Slfdt: that.formatters.adjustStartDateForUTC(selectedRow.Slfdt),
                 // Normt: selectedRow.Matnr + "-" + newEtenr, // A200000999-1 .. şeklinde olsu n
@@ -486,17 +487,38 @@ sap.ui.define([
             that._main.checkData(that, 'D');
 
         },
+        _parseDecimalForBackend: function (vValue) {
+            if (vValue === null || vValue === undefined) {
+                return "";
+            }
 
+            var sValue = vValue.toString().trim();
+
+            // 1.234,56 -> 1234.56
+            if (sValue.indexOf(",") > -1) {
+                sValue = sValue.replace(/\./g, "").replace(",", ".");
+            }
+
+            return sValue;
+        },
         onConfirmResponse: function (that, response, action) {
             debugger;
 
             var dModel = that.getOModel(that, "dm");
             var dData = dModel.getData();
+            var selectedRow = dData["selectedRow"];
 
             if (action !== 'B' && action !== 'EXCEL_UPLOAD') {
                 const row = dModel.getProperty("/selectedRowCallList");
-                var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
-                callMenge = callMenge.replace(".", "").replace(",", ".");
+                // var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
+                // callMenge = callMenge.replace(".", "").replace(",", ".");
+
+                // var callMenge = sap.ui.getCore().byId("callMenge").getValue() || "";
+                // callMenge = callMenge.toString().trim().replace(/\./g, "").replace(",", ".");
+
+                var callMenge = that._parseDecimalForBackend(
+                    sap.ui.getCore().byId("callMenge").getValue()
+                );
 
                 const item = {
                     Ebeln: row.Ebeln,
@@ -504,7 +526,8 @@ sap.ui.define([
                     Meins: row.Meins,
                     Ebelp: row.Ebelp,
                     Etenr: row.Etenr,
-                    EtenrAkt: row.EtenrAkt, // EKLENDİ 
+                    // EtenrAkt: row.EtenrAkt, // EKLENDİ 
+                    EtenrAkt: selectedRow.Etenr, // EKLENDİ 
                     Logsy: row.Logsy,
                     ApKey: row.ApKey,
                     Menge: callMenge,
