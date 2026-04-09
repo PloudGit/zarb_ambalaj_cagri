@@ -244,10 +244,10 @@ sap.ui.define([
             var callList = dData["CallList"] || [];
 
             // inputtaki değeri kaydedince cacheliyor o yüzden sıfırlayalım.
-            // var callMengeInput = sap.ui.getCore().byId("callMenge");
-            // if (callMengeInput) {
-            //     callMengeInput.setValue("0");
-            // }
+            var callMengeInput = sap.ui.getCore().byId("callMenge");
+            if (callMengeInput) {
+                callMengeInput.setValue(selectedRow.RestMenge);
+            }
             // dModel.setProperty("/selectedRowCallList/Menge", "0");
 
             let maxEtenr = 0;
@@ -510,11 +510,6 @@ sap.ui.define([
 
             if (action !== 'B' && action !== 'EXCEL_UPLOAD') {
                 const row = dModel.getProperty("/selectedRowCallList");
-                // var callMenge = sap.ui.getCore().byId("callMenge").mProperties["value"];
-                // callMenge = callMenge.replace(".", "").replace(",", ".");
-
-                // var callMenge = sap.ui.getCore().byId("callMenge").getValue() || "";
-                // callMenge = callMenge.toString().trim().replace(/\./g, "").replace(",", ".");
 
                 var callMenge = that._parseDecimalForBackend(
                     sap.ui.getCore().byId("callMenge").getValue()

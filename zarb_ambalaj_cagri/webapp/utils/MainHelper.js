@@ -54,19 +54,19 @@ sap.ui.define([
                     }
 
                     // custom buton
-                    // var oToolbar = oFB.getToolbar ? oFB.getToolbar() : oFB._oToolbar;
-                    // if (oToolbar && !oFB._bCustomButtonAdded) {
-                    //     oFB._bCustomButtonAdded = true;
+                    var oToolbar = oFB.getToolbar ? oFB.getToolbar() : oFB._oToolbar;
+                    if (oToolbar && !oFB._bCustomButtonAdded) {
+                        oFB._bCustomButtonAdded = true;
 
-                    //     oToolbar.addContent(
-                    //         new sap.m.Button({
-                    //             text: "Ambalaj Portaline Git",
-                    //             icon: "sap-icon://customer-view",
-                    //             press: that._main.onOpenAmbalajPortali.bind(that)
-                    //         }).addStyleClass("redButton sapUiSmallMarginLeft")
-                    //     );
+                        oToolbar.addContent(
+                            new sap.m.Button({
+                                text: "Ambalaj Portaline Git",
+                                icon: "sap-icon://customer-view",
+                                press: that._main.onOpenAmbalajPortali.bind(that)
+                            }).addStyleClass("redButton sapUiSmallMarginLeft")
+                        );
 
-                    // }
+                    }
 
                 
 
