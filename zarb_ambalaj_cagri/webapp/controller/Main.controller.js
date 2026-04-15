@@ -784,6 +784,7 @@ sap.ui.define([
 
         _mapExcelDataToTable: function (that, excelData) {
             debugger;
+
             const dModel = that.getView().getModel("dm");
             const oBundle = that.getView().getModel("i18n").getResourceBundle();
             const tableData = dModel.getProperty("/OrderList");
@@ -791,25 +792,101 @@ sap.ui.define([
             const sasHeader = oBundle.getText("sasNumber");
             const kalemHeader = oBundle.getText("itemNumber");
             const printHeader = oBundle.getText("printCode");
+            const firmDeliveryDateHeader = oBundle.getText("firmDeliveryDate");
+
+            const parseExcelDateToDateObject = function (value) {
+                if (!value) {
+                    return null;
+                }
+
+                // Excel serial date
+                if (typeof value === "number") {
+                    const jsDate = new Date((value - 25569) * 86400 * 1000);
+                    jsDate.setHours(0, 0, 0, 0);
+                    return jsDate;
+                }
+
+                const stringValue = value.toString().trim();
+
+                // dd.MM.yyyy
+                if (/^\d{2}\.\d{2}\.\d{4}$/.test(stringValue)) {
+                    const parts = stringValue.split(".");
+                    const date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    date.setHours(0, 0, 0, 0);
+                    return date;
+                }
+
+                // dd/MM/yyyy
+                if (/^\d{2}\/\d{2}\/\d{4}$/.test(stringValue)) {
+                    const parts = stringValue.split("/");
+                    const date = new Date(parts[2], parts[1] - 1, parts[0]);
+                    date.setHours(0, 0, 0, 0);
+                    return date;
+                }
+
+                // yyyy-MM-dd
+                if (/^\d{4}-\d{2}-\d{2}$/.test(stringValue)) {
+                    const parts = stringValue.split("-");
+                    const date = new Date(parts[0], parts[1] - 1, parts[2]);
+                    date.setHours(0, 0, 0, 0);
+                    return date;
+                }
+
+                return null;
+            };
 
             excelData.forEach((excelRow) => {
                 const sasNo = excelRow[sasHeader]?.toString().padStart(10, "0");
                 const kalemNo = excelRow[kalemHeader]?.toString().padStart(5, "0");
+                const slfdt = parseExcelDateToDateObject(excelRow[firmDeliveryDateHeader]);
 
                 const matchedRow = tableData.find(
-                    (row) => row.Ebeln === sasNo && row.Ebelp === kalemNo && row.RestMenge !== "0.000"
+                    (row) =>
+                        row.Ebeln === sasNo &&
+                        row.Ebelp === kalemNo &&
+                        row.RestMenge !== "0.000"
                 );
 
                 if (matchedRow) {
                     matchedRow.Normt = excelRow[printHeader];
+                    matchedRow.Slfdt = slfdt;
                 }
             });
 
-            dModel.refresh();
+            dModel.refresh(true);
 
             that.showMessage("success", "excelAppliedToTable");
             that.getView().byId("excelUploader").setValue("");
         },
+
+        // _mapExcelDataToTable: function (that, excelData) {
+        //     debugger;
+        //     const dModel = that.getView().getModel("dm");
+        //     const oBundle = that.getView().getModel("i18n").getResourceBundle();
+        //     const tableData = dModel.getProperty("/OrderList");
+
+        //     const sasHeader = oBundle.getText("sasNumber");
+        //     const kalemHeader = oBundle.getText("itemNumber");
+        //     const printHeader = oBundle.getText("printCode");
+
+        //     excelData.forEach((excelRow) => {
+        //         const sasNo = excelRow[sasHeader]?.toString().padStart(10, "0");
+        //         const kalemNo = excelRow[kalemHeader]?.toString().padStart(5, "0");
+
+        //         const matchedRow = tableData.find(
+        //             (row) => row.Ebeln === sasNo && row.Ebelp === kalemNo && row.RestMenge !== "0.000"
+        //         );
+
+        //         if (matchedRow) {
+        //             matchedRow.Normt = excelRow[printHeader];
+        //         }
+        //     });
+
+        //     dModel.refresh();
+
+        //     that.showMessage("success", "excelAppliedToTable");
+        //     that.getView().byId("excelUploader").setValue("");
+        // },
 
         onFileChange: function (oEvent) {
             debugger;
